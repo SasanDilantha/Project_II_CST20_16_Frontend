@@ -4,9 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../theme/ThemeContext';
 
 const farms = [
-  { id: 1, name: 'Farm 1', location: 'Location 1', chickens: 150, eggsPerDay: 120 },
-  { id: 2, name: 'Farm 2', location: 'Location 2', chickens: 200, eggsPerDay: 180 },
-  { id: 3, name: 'Farm 3', location: 'Location 3', chickens: 250, eggsPerDay: 220 },
+  { id: 1, name: 'Farm 1', startedChickCount: 200, currentChickCount: 150, age: '6 months' },
+  { id: 2, name: 'Farm 2', startedChickCount: 250, currentChickCount: 200, age: '8 months' },
+  { id: 3, name: 'Farm 3', startedChickCount: 300, currentChickCount: 250, age: '10 months' },
 ];
 
 const FarmDetailsScreen = ({ navigation }) => {
@@ -20,9 +20,9 @@ const FarmDetailsScreen = ({ navigation }) => {
             <Icon name="home" size={30} color={theme.primary} style={styles.icon} />
             <View style={styles.textContainer}>
               <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
-              <Text style={{ color: theme.text }}>Location: {farm.location}</Text>
-              <Text style={{ color: theme.text }}>Chickens: {farm.chickens}</Text>
-              <Text style={{ color: theme.text }}>Eggs per day: {farm.eggsPerDay}</Text>
+              <Text style={{ color: theme.text }}>Started Chick Count: {farm.startedChickCount}</Text>
+              <Text style={{ color: theme.text }}>Current Chick Count: {farm.currentChickCount}</Text>
+              <Text style={{ color: theme.text }}>Age: {farm.age}</Text>
             </View>
           </View>
         </TouchableOpacity>

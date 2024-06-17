@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
 import Collapsible from 'react-native-collapsible';
@@ -141,8 +141,8 @@ const ReportScreen = () => {
           <Text style={[styles.detailText, { color: theme.text }]}>Eggs Collected: {item.dailyReport.eggsCollected}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Mortality Rate: {item.dailyReport.mortalityRate}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Feed Consumed: {item.dailyReport.feedConsumed} kg</Text>
-          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: ${item.dailyReport.income}</Text>
-          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: ${item.dailyReport.expenses}</Text>
+          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: Rs.{item.dailyReport.income}</Text>
+          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: Rs.{item.dailyReport.expenses}</Text>
         </View>
       </Collapsible>
 
@@ -155,11 +155,10 @@ const ReportScreen = () => {
           <Text style={[styles.detailText, { color: theme.text }]}>Eggs Collected: {item.monthlyReport.eggsCollected}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Mortality Rate: {item.monthlyReport.mortalityRate}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Feed Consumed: {item.monthlyReport.feedConsumed} kg</Text>
-          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: ${item.monthlyReport.income}</Text>
-          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: ${item.monthlyReport.expenses}</Text>
+          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: Rs.{item.monthlyReport.income}</Text>
+          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: Rs.{item.monthlyReport.expenses}</Text>
         </View>
       </Collapsible>
-
     </View>
   );
 
@@ -184,12 +183,17 @@ const ReportScreen = () => {
         arrowIconStyle={{ tintColor: theme.text }}
       />
 
-      {selectedFarm && (
-        <FlatList
-          data={farms.filter(farm => farm.name === selectedFarm)}
-          renderItem={renderFarmDetail}
-          keyExtractor={item => item.name}
-        />
+      {selectedFarm ? (
+        <>
+          <FlatList
+            data={farms.filter(farm => farm.name === selectedFarm)}
+            renderItem={renderFarmDetail}
+            keyExtractor={item => item.name}
+          />
+          
+        </>
+      ) : (
+        <Image source={require('../../assets/chick_report.png')} style={styles.placeholderImage} />
       )}
     </View>
   );
@@ -244,6 +248,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
+  },
+  placeholderImage: {
+    width: '100%',
+    height:'50%',
+    resizeMode: 'contain',
+    marginTop: 120,
   },
 });
 

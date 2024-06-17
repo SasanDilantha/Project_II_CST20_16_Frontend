@@ -1,80 +1,96 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
 
 const medicalInventory = [
   { 
     id: '1', 
-    block: 'Block A', 
-    name: 'Vaccine A', 
-    quantity: '50 doses', 
     supplier: 'Supplier A', 
-    cost: '$100' 
+    drug: 'Vaccine A', 
+    quantity: '50 doses', 
+    cost: 'Rs.1000', 
+    date: '2024-01-01', 
+    expireDate: '2024-06-01' 
   },
   { 
     id: '2', 
-    block: 'Block A', 
-    name: 'Antibiotic B', 
-    quantity: '100 doses', 
     supplier: 'Supplier B', 
-    cost: '$200' 
+    drug: 'Antibiotic B', 
+    quantity: '100 doses', 
+    cost: 'Rs.2000', 
+    date: '2024-01-05', 
+    expireDate: '2024-06-05' 
   },
   { 
     id: '3', 
-    block: 'Block B', 
-    name: 'Vitamin C', 
-    quantity: '200 doses', 
     supplier: 'Supplier C', 
-    cost: '$150' 
+    drug: 'Vitamin C', 
+    quantity: '200 doses', 
+    cost: 'Rs.1500', 
+    date: '2024-01-10', 
+    expireDate: '2024-06-10' 
   },
   { 
     id: '4', 
-    block: 'Block B', 
-    name: 'Vaccine B', 
-    quantity: '60 doses', 
     supplier: 'Supplier A', 
-    cost: '$120' 
+    drug: 'Vaccine B', 
+    quantity: '60 doses', 
+    cost: 'Rs.1200', 
+    date: '2024-01-15', 
+    expireDate: '2024-06-15' 
   },
   { 
     id: '5', 
-    block: 'Block C', 
-    name: 'Antibiotic C', 
-    quantity: '80 doses', 
     supplier: 'Supplier B', 
-    cost: '$160' 
+    drug: 'Antibiotic C', 
+    quantity: '80 doses', 
+    cost: 'Rs.1600', 
+    date: '2024-01-20', 
+    expireDate: '2024-06-20' 
   },
   { 
     id: '6', 
-    block: 'Block C', 
-    name: 'Vitamin D', 
-    quantity: '150 doses', 
     supplier: 'Supplier C', 
-    cost: '$130' 
+    drug: 'Vitamin D', 
+    quantity: '150 doses', 
+    cost: 'Rs.1300', 
+    date: '2024-01-25', 
+    expireDate: '2024-06-25' 
   },
 ];
 
 const MedicalInventoryScreen = () => {
   const { theme } = useTheme();
 
-  const groupedMedicalInventory = medicalInventory.reduce((acc, item) => {
-    (acc[item.block] = acc[item.block] || []).push(item);
-    return acc;
-  }, {});
-
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-      
-      {Object.keys(groupedMedicalInventory).map((block) => (
-        <View key={block} style={styles.blockContainer}>
-          <Text style={[styles.blockTitle, { color: theme.primary }]}>{block}</Text>
-          {groupedMedicalInventory[block].map((item) => (
-            <View key={item.id} style={[styles.card, { backgroundColor: theme.cardBackground }]}>
-              <Text style={[styles.cardText, { color: theme.text }]}>Name: {item.name}</Text>
-              <Text style={[styles.cardText, { color: theme.text }]}>Quantity: {item.quantity}</Text>
-              <Text style={[styles.cardText, { color: theme.text }]}>Supplier: {item.supplier}</Text>
-              <Text style={[styles.cardText, { color: theme.text }]}>Cost: {item.cost}</Text>
-            </View>
-          ))}
+      {medicalInventory.map((item) => (
+        <View key={item.id} style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
+          <View style={styles.detailRow}>
+            <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {item.supplier}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="pill" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Drug: {item.drug}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {item.quantity}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Cost: {item.cost}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Date: {item.date}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
+            <Text style={[styles.detailText, { color: theme.text }]}>Expire Date: {item.expireDate}</Text>
+          </View>
         </View>
       ))}
     </ScrollView>
@@ -86,29 +102,25 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  blockContainer: {
-    marginBottom: 16,
-  },
-  blockTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
   card: {
     padding: 16,
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 16,
     elevation: 2,
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
   },
-  cardText: {
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  detailText: {
     fontSize: 16,
-    marginBottom: 4,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, FlatList, Modal, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, FlatList, Modal, Alert, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
@@ -110,7 +110,7 @@ const UserManagementScreen = () => {
         <Text style={[styles.cardText, { color: theme.text }]}>Address: {item.address}</Text>
         <Text style={[styles.cardText, { color: theme.text }]}>Farm: {item.farm}</Text>
         <Text style={[styles.cardText, { color: theme.text }]}>Works: {item.works}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Salary: ${item.salary}</Text>
+        <Text style={[styles.cardText, { color: theme.text }]}>Salary: Rs.{item.salary}</Text>
         <Text style={[styles.cardText, { color: theme.text }]}>Role: {item.role}</Text>
       </View>
       <TouchableOpacity onPress={() => handleEditEmployee(item)}>
@@ -143,6 +143,10 @@ const UserManagementScreen = () => {
         arrowIconStyle={{ tintColor: theme.text }}
       />
 
+      {!selectedFarm && (
+        <Image source={require('../../assets/chick_user_man.png')} style={styles.placeholderImage} />
+      )}
+
       {selectedFarm && (
         <>
           <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground }]}>
@@ -159,6 +163,13 @@ const UserManagementScreen = () => {
               <Text style={styles.buttonText}>Add Employee</Text>
             </TouchableOpacity>
           </View>
+
+          <FlatList
+            data={filteredEmployees}
+            renderItem={renderEmployee}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.section}
+          />
         </>
       )}
 
@@ -256,15 +267,6 @@ const UserManagementScreen = () => {
           </View>
         </View>
       </Modal>
-
-      {showEmployees && (
-        <FlatList
-          data={filteredEmployees}
-          renderItem={renderEmployee}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.section}
-        />
-      )}
     </View>
   );
 };
@@ -392,6 +394,12 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     marginLeft: 8,
+  },
+  placeholderImage: {
+    width: '100%',
+    height:'50%',
+    resizeMode: 'contain',
+    marginTop: 120,
   },
 });
 
