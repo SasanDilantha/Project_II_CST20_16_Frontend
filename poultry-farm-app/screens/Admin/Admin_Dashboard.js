@@ -55,7 +55,7 @@ const SidePanel = ({ visible, onClose }) => {
           </View>
           <View style={styles.profileContainer}>
             <Image
-              source={{ uri: 'https://via.placeholder.com/100' }} // Replace with your profile image URL
+              source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
               style={styles.profileImage}
             />
             <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>

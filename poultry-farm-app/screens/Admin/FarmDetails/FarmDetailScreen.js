@@ -11,9 +11,9 @@ const FarmDetailScreen = ({ route, navigation }) => {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={[styles.detailCard, { backgroundColor: theme.cardBackground }]}>
         <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
-        <Text style={[styles.detailText, { color: theme.text }]}>Location: {farm.location}</Text>
-        <Text style={[styles.detailText, { color: theme.text }]}>Chickens: {farm.chickens}</Text>
-        <Text style={[styles.detailText, { color: theme.text }]}>Eggs per day: {farm.eggsPerDay}</Text>
+        <Text style={[styles.detailText, { color: theme.text }]}>Started Chick Count: {farm.startedChickCount}</Text>
+        <Text style={[styles.detailText, { color: theme.text }]}>Current Chick Count: {farm.currentChickCount}</Text>
+        <Text style={[styles.detailText, { color: theme.text }]}>Age: {farm.age}</Text>
       </View>
       <View style={styles.cardContainer}>
         <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('BlockDetails')}>
