@@ -24,11 +24,11 @@ const FarmDetailScreen = ({ route, navigation }) => {
           <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Started Chick Count: {farm.startedChickCount}</Text>
           <Text style={[styles.detailText, { color: theme.text }]}>Remaining Chick Count: {farm.currentChickCount}</Text>
+          <Text style={[styles.detailText, { color: theme.text }]}>Total Employees: {sampleData.totalEmployees}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.button, { backgroundColor: theme.primary }]}>
             <Icon name="account" size={24} color="#fff" />
             <Text style={styles.buttonText}>Farm Manager Details</Text>
           </TouchableOpacity>
-          <Text style={[styles.detailText, { color: theme.text }]}>Total Employees: {sampleData.totalEmployees}</Text>
         </View>
         <View style={styles.cardContainer}>
           <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('ChickInventory')}>

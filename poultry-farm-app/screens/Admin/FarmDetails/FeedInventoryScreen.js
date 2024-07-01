@@ -37,7 +37,7 @@ const FeedInventoryScreen = () => {
             <View key={index} style={[styles.blockCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
               <Text style={[styles.blockTitle, { color: theme.primary }]}>{block.name}</Text>
               {block.feeds.map((feed) => (
-                  <View key={feed.id} style={styles.feedCard}>
+                  <View key={feed.id} style={styles.feedDetails}>
                     <View style={styles.detailRow}>
                       <Icon name="food-apple" size={20} color={theme.iconColor} style={styles.icon} />
                       <Text style={[styles.detailText, { color: theme.text }]}>Type: {feed.type}</Text>
@@ -87,11 +87,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
   },
-  feedCard: {
+  feedDetails: {
     marginBottom: 16,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: '#f0f0f0',
   },
   detailRow: {
     flexDirection: 'row',

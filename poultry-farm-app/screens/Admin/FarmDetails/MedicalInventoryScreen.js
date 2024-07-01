@@ -37,7 +37,7 @@ const MedicalInventoryScreen = () => {
             <View key={index} style={[styles.blockCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
               <Text style={[styles.blockTitle, { color: theme.primary }]}>{block.name}</Text>
               {block.medicals.map((medical) => (
-                  <View key={medical.id} style={styles.medicalCard}>
+                  <View key={medical.id} style={styles.medicalDetails}>
                     <View style={styles.detailRow}>
                       <Icon name="pill" size={20} color={theme.iconColor} style={styles.icon} />
                       <Text style={[styles.detailText, { color: theme.text }]}>Drug: {medical.drug}</Text>
@@ -87,11 +87,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
   },
-  medicalCard: {
+  medicalDetails: {
     marginBottom: 16,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: '#f0f0f0',
   },
   detailRow: {
     flexDirection: 'row',
