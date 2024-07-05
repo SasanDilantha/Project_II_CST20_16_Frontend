@@ -2,31 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import {getAllInventoryDetails} from "../../../services/chickService";
 
-// Example data grouped by blocks
-const blocks = [
-    {
-        name: 'Block A',
-        chicks: [
-            { id: '1', supplier: 'Supplier A', breed: 'Breed X', quantity: 150, cost: 'Rs.3000.00', purchaseDate: '2024-01-01' },
-            // Add more chicks if needed
-        ],
-    },
-    {
-        name: 'Block B',
-        chicks: [
-            { id: '2', supplier: 'Supplier B', breed: 'Breed Y', quantity: 200, cost: 'Rs.5000.00', purchaseDate: '2024-01-05' },
-            // Add more chicks if needed
-        ],
-    },
-    {
-        name: 'Block C',
-        chicks: [
-            { id: '3', supplier: 'Supplier A', breed: 'Breed Z', quantity: 250, cost: 'Rs.5000.00', purchaseDate: '2024-01-10' },
-            // Add more chicks if needed
-        ],
-    },
-];
+// const chicks = [
+//   { id: '1', supplier: 'Supplier A', breed: 'Breed X', quantity: 150, cost: 'Rs.3000.00', purchaseDate: '2024-01-01', placementCode: 'PC001' },
+//   { id: '2', supplier: 'Supplier B', breed: 'Breed Y', quantity: 200, cost: 'Rs.5000.00', purchaseDate: '2024-01-05', placementCode: 'PC002' },
+//   { id: '3', supplier: 'Supplier A', breed: 'Breed Z', quantity: 250, cost: 'Rs.5000.00', purchaseDate: '2024-01-10', placementCode: 'PC003' },
+//   { id: '5', supplier: 'Supplier B', breed: 'Breed Y', quantity: 180, cost: 'Rs.4500.00', purchaseDate: '2024-01-20', placementCode: 'PC005' },
+//   { id: '4', supplier: 'Supplier C', breed: 'Breed X', quantity: 100, cost: 'Rs.3000.00', purchaseDate: '2024-01-15', placementCode: 'PC004' },
+// ];
 
 const ChickInventoryScreen = () => {
     const { theme } = useTheme();

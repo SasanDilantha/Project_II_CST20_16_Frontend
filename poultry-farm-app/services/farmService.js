@@ -1,8 +1,13 @@
 import axios from 'axios';
-import {GET_ALL_FARM_DETAILS_FOR_FIRST_UI} from '@env';
+import {
+    GET_ALL_FARM_DETAILS_FOR_FIRST_UI
+} from '@env';
 
-// Farm Service api
+// Farm-Service api
 const FARM_API_URL_FIRST_ENDPOINT = GET_ALL_FARM_DETAILS_FOR_FIRST_UI;
+
+
+
 
 export const  getAllFarmDetails = async () => {
     try {
@@ -21,3 +26,4 @@ export const  getAllFarmDetails = async () => {
         console.error('Error Config ::', err.config);
     }
 };
+

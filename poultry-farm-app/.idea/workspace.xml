@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c55d439-8d52-439d-be0b-b80b36942dde" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/poultry-farm-app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/farmService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Admin/Admin_FarmDetailsScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Admin/Admin_FarmDetailsScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Admin/FarmDetails/FarmDetailScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Admin/FarmDetails/FarmDetailScreen.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/chickService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Admin/FarmDetails/ChickInventoryScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Admin/FarmDetails/ChickInventoryScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/farmService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/farmService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +80,7 @@
       <workItem from="1719356842429" duration="421000" />
       <workItem from="1719399749037" duration="79000" />
       <workItem from="1719400540678" duration="1316000" />
+      <workItem from="1719414926508" duration="6175000" />
     </task>
     <servers />
   </component>
