@@ -47,14 +47,14 @@ const UserManagementScreen = () => {
 
   const handleAddEmployee = () => {
     if (
-      !newEmployee.name ||
-      !newEmployee.position ||
-      !newEmployee.email ||
-      !newEmployee.phone ||
-      !newEmployee.address ||
-      !newEmployee.farm ||
-      !newEmployee.works ||
-      !newEmployee.salary
+        !newEmployee.name ||
+        !newEmployee.position ||
+        !newEmployee.email ||
+        !newEmployee.phone ||
+        !newEmployee.address ||
+        !newEmployee.farm ||
+        !newEmployee.works ||
+        !newEmployee.salary
     ) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
@@ -100,174 +100,180 @@ const UserManagementScreen = () => {
   const filteredEmployees = employees.filter(employee => employee.farm === selectedFarm);
 
   const renderEmployee = ({ item }) => (
-    <View key={item.id} style={[styles.card, { backgroundColor: theme.cardBackground }]}>
-      <Icon name="account" size={24} color={theme.primary} style={styles.icon} />
-      <View style={styles.cardContent}>
-        <Text style={[styles.cardText, { color: theme.text }]}>Name: {item.name}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Position: {item.position}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Email: {item.email}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Phone: {item.phone}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Address: {item.address}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Farm: {item.farm}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Works: {item.works}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Salary: Rs.{item.salary}</Text>
-        <Text style={[styles.cardText, { color: theme.text }]}>Role: {item.role}</Text>
+      <View key={item.id} style={[styles.card, { backgroundColor: theme.cardBackground }]}>
+        <Icon name="account" size={24} color={theme.primary} style={styles.icon} />
+        <View style={styles.cardContent}>
+          <Text style={[styles.cardText, { color: theme.text }]}>Name: {item.name}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Position: {item.position}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Email: {item.email}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Phone: {item.phone}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Address: {item.address}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Farm: {item.farm}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Works: {item.works}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Salary: Rs.{item.salary}</Text>
+          <Text style={[styles.cardText, { color: theme.text }]}>Role: {item.role}</Text>
+        </View>
+        <TouchableOpacity onPress={() => handleEditEmployee(item)}>
+          <Icon name="pencil" size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => confirmDeleteEmployee(item)}>
+          <Icon name="delete" size={24} color="#FF5722" style={styles.deleteIcon} />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => handleEditEmployee(item)}>
-        <Icon name="pencil" size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => confirmDeleteEmployee(item)}>
-        <Icon name="delete" size={24} color="#FF5722" style={styles.deleteIcon} />
-      </TouchableOpacity>
-    </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.message, { color: theme.text }]}>Please select a farm to manage employees:</Text>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select a farm"
-        onChangeValue={(itemValue) => {
-          setSelectedFarm(itemValue);
-        }}
-        style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
-        dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
-        textStyle={{ color: theme.text }}
-        placeholderStyle={{ color: theme.text }}
-        arrowIconStyle={{ tintColor: theme.text }}
-      />
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[styles.message, { color: theme.text }]}>Please select a farm to manage employees:</Text>
+        <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="Select a farm"
+            onChangeValue={(itemValue) => {
+              setSelectedFarm(itemValue);
+            }}
+            style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
+            dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
+            textStyle={{ color: theme.text }}
+            placeholderStyle={{ color: theme.text }}
+            arrowIconStyle={{ tintColor: theme.text }}
+        />
 
-      {!selectedFarm && (
-        <Image source={require('../../assets/chick_user_man.png')} style={styles.placeholderImage} />
-      )}
+        {!selectedFarm && (
+            <Image source={require('../../assets/chick_user_man.png')} style={styles.placeholderImage} />
+        )}
 
-      {selectedFarm && (
-        <>
-          <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground }]}>
-            <Text style={[styles.summaryText, { color: theme.text }]}>Farm: {selectedFarm}</Text>
-            <Text style={[styles.summaryText, { color: theme.text }]}>Total Employees: {filteredEmployees.length}</Text>
-              
-            <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={() => setShowEmployees(true)}>
-              <Icon name="account-multiple" size={24} color="#fff" />
-              <Text style={styles.buttonText}>View Current Employees</Text>
-            </TouchableOpacity>
-              
-            <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={() => setModalVisible(true)}>
-              <Icon name="account-plus" size={24} color="#fff" />
-              <Text style={styles.buttonText}>Add Employee</Text>
-            </TouchableOpacity>
-          </View>
+        {selectedFarm && (
 
-          <FlatList
-            data={filteredEmployees}
-            renderItem={renderEmployee}
-            keyExtractor={item => item.id}
-            contentContainerStyle={styles.section}
-          />
-        </>
-      )}
+            <>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-            <Text style={[styles.modalTitle, { color: theme.text }]}>{isEditing ? 'Edit Employee' : 'Add New Employee'}</Text>
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Name"
-              placeholderTextColor={theme.text}
-              value={newEmployee.name}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, name: text })}
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Position"
-              placeholderTextColor={theme.text}
-              value={newEmployee.position}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, position: text })}
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Email"
-              placeholderTextColor={theme.text}
-              value={newEmployee.email}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, email: text })}
-              keyboardType="email-address"
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Phone"
-              placeholderTextColor={theme.text}
-              value={newEmployee.phone}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, phone: text })}
-              keyboardType="phone-pad"
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Address"
-              placeholderTextColor={theme.text}
-              value={newEmployee.address}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, address: text })}
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Works"
-              placeholderTextColor={theme.text}
-              value={newEmployee.works}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, works: text })}
-            />
-            <TextInput
-              style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
-              placeholder="Salary"
-              placeholderTextColor={theme.text}
-              value={newEmployee.salary}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, salary: text })}
-              keyboardType="numeric"
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.saveButton, { backgroundColor: theme.primary }]} onPress={handleAddEmployee}>
-                <Text style={styles.buttonText}>{isEditing ? "Save Changes" : "Add Employee"}</Text>
-              </TouchableOpacity>
+              <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground }]}>
+                <Text style={[styles.summaryText, { color: theme.text }]}>Farm: {selectedFarm}</Text>
+                <Text style={[styles.summaryText, { color: theme.text }]}>Total Employees: {filteredEmployees.length}</Text>
+
+                <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={() => setShowEmployees(true)}>
+                  <Icon name="account-multiple" size={24} color="#fff" />
+                  <Text style={styles.buttonText}>View Current Employees</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={() => setModalVisible(true)}>
+                  <Icon name="account-plus" size={24} color="#fff" />
+                  <Text style={styles.buttonText}>Add Employee</Text>
+                </TouchableOpacity>
+              </View>
+
+
+
+              {showEmployees && (
+                  <FlatList
+                      data={filteredEmployees}
+                      renderItem={renderEmployee}
+                      keyExtractor={item => item.id}
+                      contentContainerStyle={styles.section}
+                  />
+              )}
+            </>
+        )}
+
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{isEditing ? 'Edit Employee' : 'Add New Employee'}</Text>
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Name"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.name}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, name: text })}
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Position"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.position}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, position: text })}
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Email"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.email}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, email: text })}
+                  keyboardType="email-address"
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Phone"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.phone}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, phone: text })}
+                  keyboardType="phone-pad"
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Address"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.address}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, address: text })}
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Works"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.works}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, works: text })}
+              />
+              <TextInput
+                  style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
+                  placeholder="Salary"
+                  placeholderTextColor={theme.text}
+                  value={newEmployee.salary}
+                  onChangeText={(text) => setNewEmployee({ ...newEmployee, salary: text })}
+                  keyboardType="numeric"
+              />
+              <View style={styles.modalButtons}>
+                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalButton, styles.saveButton, { backgroundColor: theme.primary }]} onPress={handleAddEmployee}>
+                  <Text style={styles.buttonText}>{isEditing ? "Save Changes" : "Add Employee"}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={deleteModalVisible}
-        onRequestClose={() => setDeleteModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-            <Text style={[styles.modalTitle, { color: theme.text }]}>Are you sure?</Text>
-            <Text style={{ color: theme.text }}>Do you really want to delete {employeeToDelete?.name}?</Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setDeleteModalVisible(false)}>
-                <Text style={styles.buttonText}>No</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, styles.deleteButton, { backgroundColor: theme.primary }]} onPress={handleDeleteEmployee}>
-                <Text style={styles.buttonText}>Yes</Text>
-              </TouchableOpacity>
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={deleteModalVisible}
+            onRequestClose={() => setDeleteModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>Are you sure?</Text>
+              <Text style={{ color: theme.text }}>Do you really want to delete {employeeToDelete?.name}?</Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setDeleteModalVisible(false)}>
+                  <Text style={styles.buttonText}>No</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalButton, styles.deleteButton, { backgroundColor: theme.primary }]} onPress={handleDeleteEmployee}>
+                  <Text style={styles.buttonText}>Yes</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
   );
 };
 
