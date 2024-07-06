@@ -6,13 +6,13 @@ import FinanceScreen from './Admin_FinanceScreen';
 import ReportScreen from './Admin_ReportScreen';
 import UserManagementScreen from './Admin_UserManagementScreen';
 import NotificationScreen from './Admin_NotificationScreen';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 const { width } = Dimensions.get('window');
 
-const SidePanel = ({ visible, onClose }) => {
+const SidePanel = ({ visible, onClose, navigation }) => {
   const { theme, toggleTheme } = useTheme();
   const slideAnim = useState(new Animated.Value(width))[0];
   const [isEnabled, setIsEnabled] = useState(theme.mode === 'dark');
@@ -38,45 +38,67 @@ const SidePanel = ({ visible, onClose }) => {
     toggleTheme();
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+        'Logout',
+        'Are you sure you want to logout?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Logout',
+            onPress: () => navigation.replace('Login'),
+          },
+        ],
+        { cancelable: true }
+    );
+  };
+
   return (
-    <Modal
-      animationType="none"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
-      <View style={styles.modalContainer}>
-        <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
-          <View style={styles.sidePanelHeader}>
-            <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Admin</Text>
-            <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
-              <MaterialIcons name="menu" size={24} color={theme.primary} />
+      <Modal
+          animationType="none"
+          transparent={true}
+          visible={visible}
+          onRequestClose={onClose}
+      >
+        <View style={styles.modalContainer}>
+          <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
+            <View style={styles.sidePanelHeader}>
+              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Admin</Text>
+              <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
+                <MaterialIcons name="menu" size={24} color={theme.primary} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.profileContainer}>
+              <Image
+                  source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
+                  style={styles.profileImage}
+              />
+              <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
+              <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
+            </View>
+            <View style={styles.themeToggleContainer}>
+              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
+              <Switch
+                  trackColor={{ false: "#767577", true: theme.primary }}
+                  thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
+                  onValueChange={toggleSwitch}
+                  value={isEnabled}
+              />
+            </View>
+            <View style={styles.flexSpacer} />
+            <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: theme.primary }]}>
+              <Text style={[styles.logoutButtonText, { color: theme.text }]}>Logout</Text>
             </TouchableOpacity>
-          </View>
-          <View style={styles.profileContainer}>
-            <Image
-              source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
-              style={styles.profileImage}
-            />
-            <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
-            <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
-          </View>
-          <View style={styles.themeToggleContainer}>
-            <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
-            <Switch
-              trackColor={{ false: "#767577", true: theme.primary }}
-              thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
-          </View>
-        </Animated.View>
-      </View>
-    </Modal>
+          </Animated.View>
+        </View>
+      </Modal>
   );
 };
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ navigation }) => {
   const { theme } = useTheme();
   const [isSidePanelVisible, setIsSidePanelVisible] = useState(false);
 
@@ -85,55 +107,55 @@ const AdminDashboard = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Tab.Navigator
-        initialRouteName="FarmDetails"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size, focused }) => {
-            let iconName;
+      <View style={{ flex: 1 }}>
+        <Tab.Navigator
+            initialRouteName="FarmDetails"
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size, focused }) => {
+                let iconName;
 
-            if (route.name === 'FarmDetails') {
-              iconName = 'home';
-            } else if (route.name === 'Finance') {
-              iconName = 'attach-money';
-            } else if (route.name === 'Report') {
-              iconName = 'bar-chart';
-            } else if (route.name === 'UserManagement') {
-              iconName = 'person';
-            } else if (route.name === 'Notification') {
-              iconName = 'notifications';
-            }
+                if (route.name === 'FarmDetails') {
+                  iconName = 'home';
+                } else if (route.name === 'Finance') {
+                  iconName = 'attach-money';
+                } else if (route.name === 'Report') {
+                  iconName = 'bar-chart';
+                } else if (route.name === 'UserManagement') {
+                  iconName = 'person';
+                } else if (route.name === 'Notification') {
+                  iconName = 'notifications';
+                }
 
-            return (
-              <View style={[styles.iconContainer, focused && styles.iconFocused]}>
-                <MaterialIcons name={iconName} size={focused ? size * 1.2 : size} color={color} />
-              </View>
-            );
-          },
-          tabBarActiveTintColor: theme.primary,
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: {
-            backgroundColor: theme.background,
-          },
-          headerStyle: {
-            backgroundColor: theme.background,
-          },
-          headerTintColor: theme.text,
-          headerRight: () => (
-            <TouchableOpacity onPress={toggleSidePanel} style={styles.menuIconContainer}>
-              <MaterialIcons name="menu" size={24} color={theme.primary} />
-            </TouchableOpacity>
-          ),
-        })}
-      >
-        <Tab.Screen name="Finance" component={FinanceScreen} />
-        <Tab.Screen name="Report" component={ReportScreen} />
-        <Tab.Screen name="FarmDetails" component={FarmDetailsScreen} />
-        <Tab.Screen name="UserManagement" component={UserManagementScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
-      </Tab.Navigator>
-      <SidePanel visible={isSidePanelVisible} onClose={toggleSidePanel} />
-    </View>
+                return (
+                    <View style={[styles.iconContainer, focused && styles.iconFocused]}>
+                      <MaterialIcons name={iconName} size={focused ? size * 1.2 : size} color={color} />
+                    </View>
+                );
+              },
+              tabBarActiveTintColor: theme.primary,
+              tabBarInactiveTintColor: 'gray',
+              tabBarStyle: {
+                backgroundColor: theme.background,
+              },
+              headerStyle: {
+                backgroundColor: theme.background,
+              },
+              headerTintColor: theme.text,
+              headerRight: () => (
+                  <TouchableOpacity onPress={toggleSidePanel} style={styles.menuIconContainer}>
+                    <MaterialIcons name="menu" size={24} color={theme.primary} />
+                  </TouchableOpacity>
+              ),
+            })}
+        >
+          <Tab.Screen name="Finance" component={FinanceScreen} />
+          <Tab.Screen name="Report" component={ReportScreen} />
+          <Tab.Screen name="FarmDetails" component={FarmDetailsScreen} />
+          <Tab.Screen name="UserManagement" component={UserManagementScreen} />
+          <Tab.Screen name="Notification" component={NotificationScreen} />
+        </Tab.Navigator>
+        <SidePanel visible={isSidePanelVisible} onClose={toggleSidePanel} navigation={navigation} />
+      </View>
   );
 };
 
@@ -149,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconFocused: {
-    transform: [{ scale: 1.6}],
+    transform: [{ scale: 1.6 }],
   },
   sidePanel: {
     position: 'absolute',
@@ -182,7 +204,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   profileContainer: {
-    marginTop: 20,
     alignItems: 'center',
   },
   profileImage: {
@@ -196,10 +217,20 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   themeToggleContainer: {
-    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  flexSpacer: {
+    flex: 1,
+  },
+  logoutButton: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  logoutButtonText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
 });
 
