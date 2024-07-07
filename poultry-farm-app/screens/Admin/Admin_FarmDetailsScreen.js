@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../theme/ThemeContext';
+import {getAllFarmDetails} from "../../services/farmService";
 
 const initialFarms = [
   { id: 1, name: 'Farm 1', startedChickCount: 200, currentChickCount: 150, location: 'Location 1', blockCount: 5 },
@@ -11,7 +12,7 @@ const initialFarms = [
 
 const FarmDetailsScreen = ({ navigation }) => {
   const { theme } = useTheme();
-  const [farms, setFarms] = useState(initialFarms);
+  //const [farms, setFarms] = useState(initialFarms);
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isConfirmModalVisible, setConfirmModalVisible] = useState(false);
@@ -70,6 +71,24 @@ const FarmDetailsScreen = ({ navigation }) => {
     setDeleteModalVisible(false);
     setConfirmModalVisible(false);
   };
+
+  // create user state
+  const [farms, setFarms] = useState([]);
+  const [error, setError] = useState(null);
+
+  // create use effect
+  useEffect(() => {
+    const getFarm = async () => {
+      try{
+        const farmDetails = await getAllFarmDetails();
+        setFarms(farmDetails);
+        console.log(farmDetails);
+      }catch(err){
+        setError(err)
+      }
+    }
+    getFarm();
+  }, []);
 
   return (
       <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
