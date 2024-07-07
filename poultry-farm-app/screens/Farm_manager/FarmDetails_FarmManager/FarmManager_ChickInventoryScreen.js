@@ -188,16 +188,19 @@ const ChickInventoryScreen = () => {
                             value={newChick.cost}
                             onChangeText={(text) => setNewChick({ ...newChick, cost: text })}
                         />
+                        <View>
+                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
 
-                        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                            <TextInput
-                                placeholder="Purchase Date (YYYY-MM-DD)"
-                                style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
-                                placeholderTextColor={theme.placeholder}
-                                value={newChick.purchaseDate}
-                                editable={false}
-                            />
-                        </TouchableOpacity>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
+                                <TextInput
+                                    placeholder="Purchase Date (YYYY-MM-DD)"
+                                    style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                                    placeholderTextColor={theme.placeholder}
+                                    value={newChick.purchaseDate}
+                                    editable={false}
+                                />
+                            </TouchableOpacity>
+                        </View>
 
                         {showDatePicker && (
                             <DateTimePicker
@@ -229,15 +232,19 @@ const ChickInventoryScreen = () => {
                         <TextInput placeholder="Breed" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.breed} onChangeText={(text) => setEditChick({ ...editChick, breed: text })} />
                         <TextInput placeholder="Quantity" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.quantity.toString()} onChangeText={(text) => setEditChick({ ...editChick, quantity: text })} />
                         <TextInput placeholder="Cost" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.cost} onChangeText={(text) => setEditChick({ ...editChick, cost: text })} />
-                        <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('edit'); }}>
+
+                        <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
+
+                        <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
                             <TextInput
                                 placeholder="Purchase Date (YYYY-MM-DD)"
                                 style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                 placeholderTextColor={theme.placeholder}
-                                value={editChick.purchaseDate}
+                                value={newChick.purchaseDate}
                                 editable={false}
                             />
                         </TouchableOpacity>
+
                         {showDatePicker && datePickerFor === 'edit' && (
                             <DateTimePicker
                                 value={new Date(editChick.purchaseDate)}
