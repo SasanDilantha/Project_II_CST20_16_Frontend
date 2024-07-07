@@ -13,8 +13,14 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    // Handle the login logic here
-    navigation.replace('AdminDashboard');
+    // Placeholder for real login logic
+    if (username === 'admin') {
+      navigation.replace('AdminDashboard');
+    } else if (username === 'farmmanager') {
+      navigation.replace('FarmManagerDashboard');
+    } else {
+      Alert.alert('Error', 'Invalid credentials');
+    }
   };
 
   const handleForgotPassword = () => {
@@ -23,29 +29,29 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Image source={require('../../assets/logo.png')} style={styles.logo} />
-      <Text style={[styles.title, { color: theme.text }]}>Login</Text>
-      <TextInput
-        style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText, borderColor: theme.borderColor }]}
-        placeholder="Username"
-        placeholderTextColor={theme.text}
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText, borderColor: theme.borderColor }]}
-        placeholder="Password"
-        placeholderTextColor={theme.text}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Login" onPress={handleLogin} color={theme.primary} />
-      <TouchableOpacity onPress={handleForgotPassword}>
-        <Text style={[styles.forgotPassword, { color: theme.secondary }]}>Forgot Password?</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Image source={require('../../assets/logo.png')} style={styles.logo} />
+        <Text style={[styles.title, { color: theme.text }]}>Login</Text>
+        <TextInput
+            style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText, borderColor: theme.borderColor }]}
+            placeholder="Username"
+            placeholderTextColor={theme.text}
+            value={username}
+            onChangeText={setUsername}
+        />
+        <TextInput
+            style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText, borderColor: theme.borderColor }]}
+            placeholder="Password"
+            placeholderTextColor={theme.text}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+        />
+        <Button title="Login" onPress={handleLogin} color={theme.primary} />
+        <TouchableOpacity onPress={handleForgotPassword}>
+          <Text style={[styles.forgotPassword, { color: theme.secondary }]}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
   );
 };
 
