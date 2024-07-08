@@ -33,3 +33,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# IDE mapping
+.idea
+
+#ENV file
+.env
