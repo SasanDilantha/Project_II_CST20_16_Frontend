@@ -6,16 +6,11 @@ import {
 // Farm-Service api
 const FARM_API_URL_FIRST_ENDPOINT = GET_ALL_FARM_DETAILS_FOR_FIRST_UI;
 
-
-
-
 export const  getAllFarmDetails = async () => {
     try {
         const {data} = await axios.get(FARM_API_URL_FIRST_ENDPOINT);
         return data;
     }catch(err){
-        // console.log(err);
-        // throw err;
         if (err.response){
             console.error('Error getting from response ::', err.response.data);
         }else if(err.request){

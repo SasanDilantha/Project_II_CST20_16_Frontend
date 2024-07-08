@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../theme/ThemeContext';
-import {getAllFarmDetails} from "../../services/farmService";
-
-const initialFarms = [
-  { id: 1, name: 'Farm 1', startedChickCount: 200, currentChickCount: 150, location: 'Location 1', blockCount: 5 },
-  { id: 2, name: 'Farm 2', startedChickCount: 250, currentChickCount: 200, location: 'Location 2', blockCount: 7 },
-  { id: 3, name: 'Farm 3', startedChickCount: 300, currentChickCount: 250, location: 'Location 3', blockCount: 6 },
-];
+import { getAllFarmDetails } from '../../services/farmService';
+import axios from 'axios';
+import {
+  ADD_FARM
+} from '@env';
 
 const FarmDetailsScreen = ({ navigation }) => {
   const { theme } = useTheme();
-  //const [farms, setFarms] = useState(initialFarms);
+  const [farms, setFarms] = useState([]);
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isConfirmModalVisible, setConfirmModalVisible] = useState(false);
@@ -21,8 +19,6 @@ const FarmDetailsScreen = ({ navigation }) => {
   const [farmDetails, setFarmDetails] = useState({
     name: '',
     location: '',
-    blockCount: '',
-    managerDetails: '',
   });
 
   const toggleAddModal = () => {
@@ -38,24 +34,26 @@ const FarmDetailsScreen = ({ navigation }) => {
     setConfirmModalVisible(!isConfirmModalVisible);
   };
 
-  const handleAddFarm = () => {
-    const newFarm = {
-      id: farms.length + 1,
-      name: farmDetails.name,
-      startedChickCount: 0,
-      currentChickCount: 0,
-      location: farmDetails.location,
-      blockCount: parseInt(farmDetails.blockCount, 10),
-      managerDetails: farmDetails.managerDetails,
-    };
-    setFarms([...farms, newFarm]);
-    setFarmDetails({
-      name: '',
-      location: '',
-      blockCount: '',
-      managerDetails: '',
-    });
-    setAddModalVisible(false);
+  const handleAddFarm = async () => {
+    try {
+      const response = await axios.post(ADD_FARM, farmDetails, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Farm added successfully:', response.data);
+      // Update the farms state with the newly added farm
+      setFarms([...farms, response.data]);
+      // Reset farm details and close modal
+      setFarmDetails({
+        name: '',
+        location: '',
+      });
+      setAddModalVisible(false);
+    } catch (error) {
+      console.error('Error adding farm:', error);
+      // Handle error (e.g., show an error message)
+    }
   };
 
   const handleDeleteFarm = () => {
@@ -72,21 +70,16 @@ const FarmDetailsScreen = ({ navigation }) => {
     setConfirmModalVisible(false);
   };
 
-  // create user state
-  const [farms, setFarms] = useState([]);
-  const [error, setError] = useState(null);
-
-  // create use effect
   useEffect(() => {
     const getFarm = async () => {
-      try{
+      try {
         const farmDetails = await getAllFarmDetails();
         setFarms(farmDetails);
         console.log(farmDetails);
-      }catch(err){
-        setError(err)
+      } catch (err) {
+        setError(err);
       }
-    }
+    };
     getFarm();
   }, []);
 
@@ -94,18 +87,18 @@ const FarmDetailsScreen = ({ navigation }) => {
       <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
         {farms.map((farm) => (
             <TouchableOpacity
-                key={farm.id}
+                key={farm.farm_id}
                 style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}
                 onPress={() => navigation.navigate('FarmDetail', { farm })}
             >
               <View style={styles.cardContent}>
                 <Icon name="home" size={30} color={theme.primary} style={styles.icon} />
                 <View style={styles.textContainer}>
-                  <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
-                  <Text style={{ color: theme.text }}>Started Chick Count: {farm.startedChickCount}</Text>
-                  <Text style={{ color: theme.text }}>Remaining Chick Count: {farm.currentChickCount}</Text>
+                  <Text style={[styles.title, { color: theme.text }]}>{farm.farm_name}</Text>
+                  <Text style={{ color: theme.text }}>Started Chick Count: {farm.begin_inventory_count}</Text>
+                  <Text style={{ color: theme.text }}>Remaining Chick Count: {farm.available_inventory_count}</Text>
                   <Text style={{ color: theme.text }}>Location: {farm.location}</Text>
-                  <Text style={{ color: theme.text }}>Block Count: {farm.blockCount}</Text>
+                  <Text style={{ color: theme.text }}>Chick Age: {farm.chick_age}</Text>
                 </View>
                 <TouchableOpacity onPress={() => toggleDeleteModal(farm)}>
                   <Icon name="delete" size={30} color={theme.primary} style={styles.deleteIcon} />
@@ -133,19 +126,6 @@ const FarmDetailsScreen = ({ navigation }) => {
                   style={[styles.input, { color: theme.text }]}
                   onChangeText={(text) => setFarmDetails({ ...farmDetails, location: text })}
                   value={farmDetails.location}
-              />
-              <TextInput
-                  placeholder="Block Count"
-                  style={[styles.input, { color: theme.text }]}
-                  keyboardType="numeric"
-                  onChangeText={(text) => setFarmDetails({ ...farmDetails, blockCount: text })}
-                  value={farmDetails.blockCount}
-              />
-              <TextInput
-                  placeholder="Manager Details"
-                  style={[styles.input, { color: theme.text }]}
-                  onChangeText={(text) => setFarmDetails({ ...farmDetails, managerDetails: text })}
-                  value={farmDetails.managerDetails}
               />
               <View style={styles.buttonContainer}>
                 <Button title="Cancel" onPress={toggleAddModal} color={theme.primary} />
