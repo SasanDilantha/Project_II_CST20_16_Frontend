@@ -1,13 +1,13 @@
+// screens/Vet/VetDashboard.js
+
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Animated, Dimensions, Modal, Switch, Image, Alert } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
-import FarmManagerFarmDetailsScreen from './FarmDetails_FarmManager/FarmManagerFarmDetailsScreen';
-import FarmManager_FinanceScreen from './FarmManager_FinanceScreen';
-import FarmManager_ReportScreen from './FarmManager_ReportScreen';
-import FarmManager_UserManagementScreen from './FarmManager_UserManagementScreen';
-import FarmManager_NotificationScreen from './FarmManager_NotificationScreen'
+import Vet_ReportScreen from './Vet_ReportScreen';
+import Vet_FarmListScreen from './Vet_FarmListScreen';
+import Vet_NotificationScreen from './Vet_NotificationScreen';
 
 const Tab = createBottomTabNavigator();
 const { width } = Dimensions.get('window');
@@ -66,18 +66,18 @@ const SidePanel = ({ visible, onClose, navigation }) => {
             <View style={styles.modalContainer}>
                 <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
                     <View style={styles.sidePanelHeader}>
-                        <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Farm Manager</Text>
+                        <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Vet</Text>
                         <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
                             <MaterialIcons name="menu" size={24} color={theme.primary} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.profileContainer}>
                         <Image
-                            source={require('../../assets/icon.png')} // Replace with your profile image URL
+                            source={require('../../assets/vet_profile.png')} // Replace with your profile image URL
                             style={styles.profileImage}
                         />
-                        <Text style={[styles.profileText, { color: theme.text }]}>Jane Doe</Text>
-                        <Text style={[styles.profileText, { color: theme.text }]}>jane.doe@example.com</Text>
+                        <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
+                        <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
                     </View>
                     <View style={styles.themeToggleContainer}>
                         <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
@@ -98,7 +98,7 @@ const SidePanel = ({ visible, onClose, navigation }) => {
     );
 };
 
-const FarmManagerDashboard = ({ navigation }) => {
+const VetDashboard = ({ navigation }) => {
     const { theme } = useTheme();
     const [isSidePanelVisible, setIsSidePanelVisible] = useState(false);
 
@@ -109,20 +109,16 @@ const FarmManagerDashboard = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <Tab.Navigator
-                initialRouteName="FarmDetails"
+                initialRouteName="VetFarmList"
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color, size, focused }) => {
                         let iconName;
 
-                        if (route.name === 'FarmDetails') {
-                            iconName = 'home';
-                        } else if (route.name === 'Finance') {
-                            iconName = 'attach-money';
-                        } else if (route.name === 'Report') {
+                        if (route.name === 'VetReport') {
                             iconName = 'bar-chart';
-                        } else if (route.name === 'UserManagement') {
-                            iconName = 'person';
-                        } else if (route.name === 'Notification') {
+                        } else if (route.name === 'VetFarmList') {
+                            iconName = 'home';
+                        } else if (route.name === 'VetNotification') {
                             iconName = 'notifications';
                         }
 
@@ -148,11 +144,9 @@ const FarmManagerDashboard = ({ navigation }) => {
                     ),
                 })}
             >
-                <Tab.Screen name="Finance" component={FarmManager_FinanceScreen} />
-                <Tab.Screen name="Report" component={FarmManager_ReportScreen} />
-                <Tab.Screen name="FarmDetails" component={FarmManagerFarmDetailsScreen} />
-                <Tab.Screen name="UserManagement" component={FarmManager_UserManagementScreen} />
-                <Tab.Screen name="Notification" component={FarmManager_NotificationScreen} />
+                <Tab.Screen name="VetReport" component={Vet_ReportScreen} options={{ title: 'Report' }} />
+                <Tab.Screen name="VetFarmList" component={Vet_FarmListScreen} options={{ title: 'Farm List' }} />
+                <Tab.Screen name="VetNotification" component={Vet_NotificationScreen} options={{ title: 'Notification' }} />
             </Tab.Navigator>
             <SidePanel visible={isSidePanelVisible} onClose={toggleSidePanel} navigation={navigation} />
         </View>
@@ -160,11 +154,6 @@ const FarmManagerDashboard = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
@@ -197,13 +186,6 @@ const styles = StyleSheet.create({
     sidePanelTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    closeButton: {
-        padding: 10,
-        borderRadius: 5,
-    },
-    closeButtonText: {
-        color: '#fff',
     },
     menuIconContainer: {
         padding: 10,
@@ -239,4 +221,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FarmManagerDashboard;
+export default VetDashboard;

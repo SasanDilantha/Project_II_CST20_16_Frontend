@@ -58,7 +58,7 @@ const FarmDetailsScreen = ({ navigation }) => {
   };
 
   const handleDeleteFarm = () => {
-    if (password === 'your_password') {
+    if (password === 'admin') {
       toggleConfirmModal();
     } else {
       alert('Incorrect password');

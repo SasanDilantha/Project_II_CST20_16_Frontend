@@ -38,7 +38,7 @@ const ChickInventoryScreen = () => {
     };
 
     const confirmDelete = () => {
-        if (password === 'm') {
+        if (password === 'farm') {
             setChicks((prevChicks) => prevChicks.filter((chick) => chick.id !== selectedChickId));
             setPasswordModalVisible(false);
             setPassword('');

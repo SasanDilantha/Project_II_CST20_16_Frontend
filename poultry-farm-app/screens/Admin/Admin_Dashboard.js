@@ -6,7 +6,7 @@ import FinanceScreen from './Admin_FinanceScreen';
 import ReportScreen from './Admin_ReportScreen';
 import UserManagementScreen from './Admin_UserManagementScreen';
 import NotificationScreen from './Admin_NotificationScreen';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 
 const Tab = createBottomTabNavigator();
@@ -56,6 +56,12 @@ const SidePanel = ({ visible, onClose, navigation }) => {
     );
   };
 
+  const handleViewRecords = () => {
+    // Navigate to the PastRecords screen
+    navigation.navigate('PastRecords');
+    onClose(); // Close the side panel
+  };
+
   return (
       <Modal
           animationType="none"
@@ -63,37 +69,44 @@ const SidePanel = ({ visible, onClose, navigation }) => {
           visible={visible}
           onRequestClose={onClose}
       >
-        <View style={styles.modalContainer}>
-          <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
-            <View style={styles.sidePanelHeader}>
-              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Admin</Text>
-              <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
-                <MaterialIcons name="menu" size={24} color={theme.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.profileContainer}>
-              <Image
-                  source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
-                  style={styles.profileImage}
-              />
-              <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
-              <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
-            </View>
-            <View style={styles.themeToggleContainer}>
-              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
-              <Switch
-                  trackColor={{ false: "#767577", true: theme.primary }}
-                  thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-              />
-            </View>
-            <View style={styles.flexSpacer} />
-            <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: theme.primary }]}>
-              <Text style={[styles.logoutButtonText, { color: theme.text }]}>Logout</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
+                <View style={styles.sidePanelHeader}>
+                  <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Admin</Text>
+                  <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
+                    <MaterialIcons name="menu" size={24} color={theme.primary} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.profileContainer}>
+                  <Image
+                      source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
+                      style={styles.profileImage}
+                  />
+                  <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
+                  <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
+                </View>
+                <View style={styles.themeToggleContainer}>
+                  <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
+                  <Switch
+                      trackColor={{ false: "#767577", true: theme.primary }}
+                      thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
+                      onValueChange={toggleSwitch}
+                      value={isEnabled}
+                  />
+                </View>
+                <TouchableOpacity onPress={handleViewRecords} style={[styles.recordsButton, { backgroundColor: theme.primary }]}>
+                  <Text style={[styles.recordsButtonText, { color: theme.text }]}>View Past Records</Text>
+                </TouchableOpacity>
+                <View style={styles.flexSpacer} />
+                <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: theme.primary }]}>
+                  <Text style={[styles.logoutButtonText, { color: theme.text }]}>Logout</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
   );
 };
@@ -220,6 +233,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  recordsButton: {
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  recordsButtonText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
   flexSpacer: {
     flex: 1,

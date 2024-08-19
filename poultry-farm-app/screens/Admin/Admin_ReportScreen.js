@@ -16,9 +16,9 @@ const ReportScreen = () => {
   ]);
 
   const farms = [
-    { 
-      name: 'Happy Farm', 
-      location: 'Green Valley', 
+    {
+      name: 'Happy Farm',
+      location: 'Green Valley',
       chickens: 1000,
       dailyReport: {
         eggsCollected: 300,
@@ -44,7 +44,7 @@ const ReportScreen = () => {
         notVaccinated: 20,
         diseases: 5,
       },
-     
+
     },
     {
       name: 'Sunshine Farm',
@@ -74,7 +74,7 @@ const ReportScreen = () => {
         notVaccinated: 20,
         diseases: 3,
       },
-      
+
     },
   ];
 
@@ -84,7 +84,7 @@ const ReportScreen = () => {
     healthReport: true,
     dailyReport: true,
     monthlyReport: true,
-    
+
   });
 
   const toggleSection = (section) => {
@@ -190,7 +190,7 @@ const ReportScreen = () => {
             renderItem={renderFarmDetail}
             keyExtractor={item => item.name}
           />
-          
+
         </>
       ) : (
         <Image source={require('../../assets/chick_report.png')} style={styles.placeholderImage} />

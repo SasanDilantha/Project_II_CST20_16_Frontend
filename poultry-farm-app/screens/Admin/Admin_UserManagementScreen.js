@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, FlatList, Modal, Alert, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, FlatList, Modal, Alert, TouchableOpacity, Image, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
+import * as ImagePicker from 'expo-image-picker';
 
 const UserManagementScreen = () => {
   const { theme } = useTheme();
@@ -15,18 +16,20 @@ const UserManagementScreen = () => {
   ]);
   const [showEmployees, setShowEmployees] = useState(false);
   const [employees, setEmployees] = useState([
-    { id: '1', name: 'John Doe', position: 'Farm Manager', email: 'john@example.com', phone: '1234567890', address: '123 Farm Road', farm: 'Happy Farm', works: 'Supervising', salary: 5000, role: 'Farm Manager' },
-    { id: '2', name: 'Jane Smith', position: 'Farm Worker', email: 'jane@example.com', phone: '0987654321', address: '456 Farm Lane', farm: 'Happy Farm', works: 'Feeding', salary: 3000, role: 'Farm Employee' },
-    { id: '3', name: 'Sam Green', position: 'Veterinarian', email: 'sam@example.com', phone: '1112223333', address: '789 Farm Street', farm: 'Sunshine Farm', works: 'Animal Health', salary: 4500, role: 'Veterinarian' },
-    { id: '4', name: 'Emily White', position: 'Farm Worker', email: 'emily@example.com', phone: '4445556666', address: '101 Farm Blvd', farm: 'Sunshine Farm', works: 'Maintenance', salary: 2800, role: 'Farm Employee' },
-    { id: '5', name: 'Michael Brown', position: 'Accountant', email: 'michael@example.com', phone: '7778889999', address: '102 Farm Rd', farm: 'Happy Farm', works: 'Finance', salary: 4000, role: 'Accountant' },
-    { id: '6', name: 'Linda Blue', position: 'Farm Worker', email: 'linda@example.com', phone: '1122334455', address: '103 Farm St', farm: 'Happy Farm', works: 'Harvesting', salary: 2900, role: 'Farm Employee' },
+    { id: '1', name: 'John Doe', position: 'Farm Manager', email: 'john@example.com', phone: '1234567890', address: '123 Farm Road', farm: 'Happy Farm', works: 'Supervising', salary: 5000, role: 'Farm Manager', profilePicture: null },
+    { id: '2', name: 'Jane Smith', position: 'Farm Worker', email: 'jane@example.com', phone: '0987654321', address: '456 Farm Lane', farm: 'Happy Farm', works: 'Feeding', salary: 3000, role: 'Farm Employee', profilePicture: null },
+    { id: '3', name: 'Sam Green', position: 'Veterinarian', email: 'sam@example.com', phone: '1112223333', address: '789 Farm Street', farm: 'Sunshine Farm', works: 'Animal Health', salary: 4500, role: 'Veterinarian', profilePicture: null },
+    { id: '4', name: 'Emily White', position: 'Farm Worker', email: 'emily@example.com', phone: '4445556666', address: '101 Farm Blvd', farm: 'Sunshine Farm', works: 'Maintenance', salary: 2800, role: 'Farm Employee', profilePicture: null },
+    { id: '5', name: 'Michael Brown', position: 'Accountant', email: 'michael@example.com', phone: '7778889999', address: '102 Farm Rd', farm: 'Happy Farm', works: 'Finance', salary: 4000, role: 'Accountant', profilePicture: null },
+    { id: '6', name: 'Linda Blue', position: 'Farm Worker', email: 'linda@example.com', phone: '1122334455', address: '103 Farm St', farm: 'Happy Farm', works: 'Harvesting', salary: 2900, role: 'Farm Employee', profilePicture: null },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editEmployeeId, setEditEmployeeId] = useState(null);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [profileModalVisible, setProfileModalVisible] = useState(false);
+  const [profilePictureToView, setProfilePictureToView] = useState(null);
   const [newEmployee, setNewEmployee] = useState({
     name: '',
     position: '',
@@ -37,6 +40,7 @@ const UserManagementScreen = () => {
     works: '',
     salary: '',
     role: 'Farm Employee', // Default role
+    profilePicture: null,
   });
 
   useEffect(() => {
@@ -72,10 +76,11 @@ const UserManagementScreen = () => {
       email: '',
       phone: '',
       address: '',
-      farm: selectedFarm,
+      farm: '',
       works: '',
       salary: '',
       role: 'Farm Employee',
+      profilePicture: null,
     });
     setModalVisible(false);
   };
@@ -99,26 +104,74 @@ const UserManagementScreen = () => {
 
   const filteredEmployees = employees.filter(employee => employee.farm === selectedFarm);
 
+  const selectProfilePicture = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted === false) {
+      Alert.alert('Permission to access camera roll is required!');
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!pickerResult.cancelled) {
+      setNewEmployee({ ...newEmployee, profilePicture: { uri: pickerResult.uri } });
+    }
+  };
+
+  const takeProfilePicture = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissionResult.granted === false) {
+      Alert.alert('Permission to access camera is required!');
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!pickerResult.cancelled) {
+      setNewEmployee({ ...newEmployee, profilePicture: { uri: pickerResult.uri } });
+    }
+  };
+
   const renderEmployee = ({ item }) => (
       <View key={item.id} style={[styles.card, { backgroundColor: theme.cardBackground }]}>
-        <Icon name="account" size={24} color={theme.primary} style={styles.icon} />
+        <TouchableOpacity onPress={() => { setProfilePictureToView(item.profilePicture); setProfileModalVisible(true); }}>
+          <Image source={item.profilePicture ? { uri: item.profilePicture.uri } : require('../../assets/default-profile.png')} style={styles.profilePicture} />
+        </TouchableOpacity>
         <View style={styles.cardContent}>
-          <Text style={[styles.cardText, { color: theme.text }]}>Name: {item.name}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Position: {item.position}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Email: {item.email}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Phone: {item.phone}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Address: {item.address}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Farm: {item.farm}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Works: {item.works}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Salary: Rs.{item.salary}</Text>
-          <Text style={[styles.cardText, { color: theme.text }]}>Role: {item.role}</Text>
+          <View style={styles.cardHeader}>
+            <Text style={[styles.cardLabel, { color: theme.text }]}>Name:</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{item.name}</Text>
+          </View>
+          <View style={styles.cardHeader}>
+            <Text style={[styles.cardLabel, { color: theme.text }]}>Position:</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{item.position}</Text>
+          </View>
+          <View style={styles.cardBody}>
+            <Text style={[styles.cardText, { color: theme.text }]}>Email: {item.email}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Phone: {item.phone}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Address: {item.address}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Farm: {item.farm}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Works: {item.works}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Salary: Rs.{item.salary}</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>Role: {item.role}</Text>
+          </View>
+          <View style={styles.cardActions}>
+            <TouchableOpacity onPress={() => handleEditEmployee(item)} style={styles.editIcon}>
+              <Icon name="pencil" size={24} color={theme.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => confirmDeleteEmployee(item)} style={styles.deleteIcon}>
+              <Icon name="delete" size={24} color="#FF5722" />
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity onPress={() => handleEditEmployee(item)}>
-          <Icon name="pencil" size={24} color={theme.primary} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => confirmDeleteEmployee(item)}>
-          <Icon name="delete" size={24} color="#FF5722" style={styles.deleteIcon} />
-        </TouchableOpacity>
       </View>
   );
 
@@ -148,9 +201,7 @@ const UserManagementScreen = () => {
         )}
 
         {selectedFarm && (
-
             <>
-
               <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground }]}>
                 <Text style={[styles.summaryText, { color: theme.text }]}>Farm: {selectedFarm}</Text>
                 <Text style={[styles.summaryText, { color: theme.text }]}>Total Employees: {filteredEmployees.length}</Text>
@@ -165,8 +216,6 @@ const UserManagementScreen = () => {
                   <Text style={styles.buttonText}>Add Employee</Text>
                 </TouchableOpacity>
               </View>
-
-
 
               {showEmployees && (
                   <FlatList
@@ -188,24 +237,28 @@ const UserManagementScreen = () => {
           <View style={styles.modalContainer}>
             <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
               <Text style={[styles.modalTitle, { color: theme.text }]}>{isEditing ? 'Edit Employee' : 'Add New Employee'}</Text>
+              <TouchableOpacity onPress={selectProfilePicture} style={styles.profilePictureContainer}>
+                <Image source={newEmployee.profilePicture ? { uri: newEmployee.profilePicture.uri } : require('../../assets/default-profile.png')} style={styles.profilePictureModal} />
+                <Icon name="pencil" size={24} color={theme.primary} style={styles.profilePictureEditIcon} />
+              </TouchableOpacity>
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Name"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.name}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, name: text })}
               />
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Position"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.position}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, position: text })}
               />
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Email"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.email}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, email: text })}
                   keyboardType="email-address"
@@ -213,7 +266,7 @@ const UserManagementScreen = () => {
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Phone"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.phone}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, phone: text })}
                   keyboardType="phone-pad"
@@ -221,21 +274,21 @@ const UserManagementScreen = () => {
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Address"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.address}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, address: text })}
               />
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Works"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.works}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, works: text })}
               />
               <TextInput
                   style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.inputText }]}
                   placeholder="Salary"
-                  placeholderTextColor={theme.text}
+                  placeholderTextColor={theme.placeholderText}
                   value={newEmployee.salary}
                   onChangeText={(text) => setNewEmployee({ ...newEmployee, salary: text })}
                   keyboardType="numeric"
@@ -270,6 +323,22 @@ const UserManagementScreen = () => {
                   <Text style={styles.buttonText}>Yes</Text>
                 </TouchableOpacity>
               </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={profileModalVisible}
+            onRequestClose={() => setProfileModalVisible(false)}
+        >
+          <View style={styles.profileModalContainer}>
+            <View style={[styles.profileModalView, { backgroundColor: theme.cardBackground }]}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setProfileModalVisible(false)}>
+                <Icon name="close" size={24} color={theme.text} />
+              </TouchableOpacity>
+              <Image source={profilePictureToView ? { uri: profilePictureToView.uri } : require('../../assets/default-profile.png')} style={styles.fullProfilePictureModalView} />
             </View>
           </View>
         </Modal>
@@ -388,24 +457,90 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  icon: {
-    marginRight: 16,
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardBody: {
+    marginTop: 8,
   },
   cardContent: {
     flex: 1,
   },
+  cardLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 4,
+  },
   cardText: {
     fontSize: 16,
     marginBottom: 4,
+  },
+  cardSubText: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  cardActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  editIcon: {
+    marginRight: 16,
   },
   deleteIcon: {
     marginLeft: 8,
   },
   placeholderImage: {
     width: '100%',
-    height:'50%',
+    height: '50%',
     resizeMode: 'contain',
     marginTop: 120,
+  },
+  profilePicture: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    marginRight: 16,
+  },
+  profilePictureContainer: {
+    position: 'relative',
+  },
+  profilePictureEditIcon: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 12,
+    padding: 2,
+  },
+  profilePictureModal: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 16,
+  },
+  profileModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  profileModalView: {
+    width: 300,
+    height: 300,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  fullProfilePictureModalView: {
+    width: 250,
+    height: 250,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
 });
 

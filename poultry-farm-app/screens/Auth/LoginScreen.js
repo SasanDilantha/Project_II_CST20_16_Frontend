@@ -1,3 +1,5 @@
+// screens/Auth/LoginScreen.js
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
@@ -18,6 +20,8 @@ const LoginScreen = ({ navigation }) => {
       navigation.replace('AdminDashboard');
     } else if (username === 'farmmanager') {
       navigation.replace('FarmManagerDashboard');
+    } else if (username === 'vet') {
+      navigation.replace('VetDashboard');
     } else {
       Alert.alert('Error', 'Invalid credentials');
     }
