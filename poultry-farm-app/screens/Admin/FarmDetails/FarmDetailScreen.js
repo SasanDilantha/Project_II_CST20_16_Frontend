@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const FarmDetailScreen = ({ route, navigation }) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const { farm } = route.params;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,30 +24,30 @@ const FarmDetailScreen = ({ route, navigation }) => {
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={[styles.detailCard, { backgroundColor: theme.cardBackground }]}>
           <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Started Chick Count: {farm.startedChickCount}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Remaining Chick Count: {farm.currentChickCount}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Total Employees: {sampleData.totalEmployees}</Text>
+          <Text style={[styles.detailText, { color: theme.text }]}>{t('started_chick_count')}: {farm.startedChickCount}</Text>
+          <Text style={[styles.detailText, { color: theme.text }]}>{t('remaining_chick_count')}: {farm.currentChickCount}</Text>
+          <Text style={[styles.detailText, { color: theme.text }]}>{t('total_employees')}: {sampleData.totalEmployees}</Text>
           <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.button, { backgroundColor: theme.primary }]}>
             <Icon name="account" size={24} color="#fff" />
-            <Text style={styles.buttonText}>Farm Manager Details</Text>
+            <Text style={styles.buttonText}>{t('farm_manager_details')}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.cardContainer}>
           <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('ChickInventory')}>
             <Icon name="bird" size={30} color={theme.primary} style={styles.icon} />
-            <Text style={[styles.cardText, { color: theme.text }]}>Chick Inventory</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{t('chick_inventory')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('FeedInventory')}>
             <Icon name="food-variant" size={30} color={theme.primary} style={styles.icon} />
-            <Text style={[styles.cardText, { color: theme.text }]}>Feed Inventory</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{t('feed_inventory')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('MedicalInventory')}>
             <Icon name="medical-bag" size={30} color={theme.primary} style={styles.icon} />
-            <Text style={[styles.cardText, { color: theme.text }]}>Medical Inventory</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{t('medical_inventory')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.card, { backgroundColor: theme.cardBackground }]} onPress={() => navigation.navigate('Monitoring')}>
             <Icon name="monitor" size={30} color={theme.primary} style={styles.icon} />
-            <Text style={[styles.cardText, { color: theme.text }]}>Monitoring</Text>
+            <Text style={[styles.cardText, { color: theme.text }]}>{t('monitoring')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -57,13 +59,13 @@ const FarmDetailScreen = ({ route, navigation }) => {
         >
           <View style={styles.modalContainer}>
             <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-              <Text style={[styles.modalTitle, { color: theme.text }]}>Farm Manager Details</Text>
-              <Text style={[styles.modalText, { color: theme.text }]}>Name: {sampleData.farmManager.name}</Text>
-              <Text style={[styles.modalText, { color: theme.text }]}>Email: {sampleData.farmManager.email}</Text>
-              <Text style={[styles.modalText, { color: theme.text }]}>Contact Number: {sampleData.farmManager.contactNumber}</Text>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{t('farm_manager_details')}</Text>
+              <Text style={[styles.modalText, { color: theme.text }]}>{t('name')}: {sampleData.farmManager.name}</Text>
+              <Text style={[styles.modalText, { color: theme.text }]}>{t('email')}: {sampleData.farmManager.email}</Text>
+              <Text style={[styles.modalText, { color: theme.text }]}>{t('contact_number')}: {sampleData.farmManager.contactNumber}</Text>
               <View style={styles.modalButtons}>
                 <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
-                  <Text style={styles.buttonText}>Close</Text>
+                  <Text style={styles.buttonText}>{t('close')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -172,8 +174,6 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: '#757575',
   },
-  saveButton: {},
-  deleteButton: {},
 });
 
 export default FarmDetailScreen;

@@ -2,34 +2,32 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
-// Example data grouped by blocks
 const blocks = [
     {
         name: 'Block A',
         chicks: [
             { id: '1', supplier: 'Supplier A', breed: 'Breed X', quantity: 150, cost: 'Rs.3000.00', purchaseDate: '2024-01-01' },
-            // Add more chicks if needed
         ],
     },
     {
         name: 'Block B',
         chicks: [
             { id: '2', supplier: 'Supplier B', breed: 'Breed Y', quantity: 200, cost: 'Rs.5000.00', purchaseDate: '2024-01-05' },
-            // Add more chicks if needed
         ],
     },
     {
         name: 'Block C',
         chicks: [
             { id: '3', supplier: 'Supplier A', breed: 'Breed Z', quantity: 250, cost: 'Rs.5000.00', purchaseDate: '2024-01-10' },
-            // Add more chicks if needed
         ],
     },
 ];
 
 const ChickInventoryScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     const calculateAgeInDays = (purchaseDate) => {
         const currentDate = new Date();
@@ -47,27 +45,27 @@ const ChickInventoryScreen = () => {
                         <View key={chick.id} style={styles.chickDetails}>
                             <View style={styles.detailRow}>
                                 <Icon name="bird" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Breed: {chick.breed}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('breed')}: {chick.breed}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {chick.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {chick.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {chick.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {chick.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Cost: {chick.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {chick.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {chick.purchaseDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {chick.purchaseDate}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Age: {calculateAgeInDays(chick.purchaseDate)} days</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('age')}: {calculateAgeInDays(chick.purchaseDate)} {t('days')}</Text>
                             </View>
                         </View>
                     ))}

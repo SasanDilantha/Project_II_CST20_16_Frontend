@@ -4,15 +4,17 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 
 const ReportScreen = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Initialize the translation hook
   const [selectedFarm, setSelectedFarm] = useState(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Happy Farm', value: 'Happy Farm' },
-    { label: 'Sunshine Farm', value: 'Sunshine Farm' }
+    { label: t('happy_farm'), value: 'Happy Farm' },
+    { label: t('sunshine_farm'), value: 'Sunshine Farm' }
   ]);
 
   const farms = [
@@ -44,7 +46,6 @@ const ReportScreen = () => {
         notVaccinated: 20,
         diseases: 5,
       },
-
     },
     {
       name: 'Sunshine Farm',
@@ -74,7 +75,6 @@ const ReportScreen = () => {
         notVaccinated: 20,
         diseases: 3,
       },
-
     },
   ];
 
@@ -84,7 +84,6 @@ const ReportScreen = () => {
     healthReport: true,
     dailyReport: true,
     monthlyReport: true,
-
   });
 
   const toggleSection = (section) => {
@@ -95,107 +94,106 @@ const ReportScreen = () => {
   };
 
   const renderFarmDetail = ({ item }) => (
-    <View style={[styles.sectionContainer, { backgroundColor: theme.cardBackground }]}>
-      <TouchableOpacity onPress={() => toggleSection('farmDetails')} style={styles.sectionHeader}>
-        <Text style={[styles.title, { color: theme.primary }]}>Farm Details</Text>
-        <Icon name={collapsedSections.farmDetails ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <Collapsible collapsed={collapsedSections.farmDetails}>
-        <View style={styles.sectionContent}>
-          <Text style={[styles.detailText, { color: theme.text }]}>Name: {item.name}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Location: {item.location}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Total Chickens: {item.chickens}</Text>
-        </View>
-      </Collapsible>
+      <View style={[styles.sectionContainer, { backgroundColor: theme.cardBackground }]}>
+        <TouchableOpacity onPress={() => toggleSection('farmDetails')} style={styles.sectionHeader}>
+          <Text style={[styles.title, { color: theme.primary }]}>{t('farm_details')}</Text>
+          <Icon name={collapsedSections.farmDetails ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsedSections.farmDetails}>
+          <View style={styles.sectionContent}>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('name')}: {item.name}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('location')}: {item.location}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('total_chickens')}: {item.chickens}</Text>
+          </View>
+        </Collapsible>
 
-      <TouchableOpacity onPress={() => toggleSection('chickDetails')} style={styles.sectionHeader}>
-        <Text style={[styles.title, { color: theme.primary }]}>Chick Details</Text>
-        <Icon name={collapsedSections.chickDetails ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <Collapsible collapsed={collapsedSections.chickDetails}>
-        <View style={styles.sectionContent}>
-          <Text style={[styles.detailText, { color: theme.text }]}>Total Chicks: {item.chickDetails.totalChicks}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Healthy Chicks: {item.chickDetails.healthyChicks}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Sick Chicks: {item.chickDetails.sickChicks}</Text>
-        </View>
-      </Collapsible>
+        <TouchableOpacity onPress={() => toggleSection('chickDetails')} style={styles.sectionHeader}>
+          <Text style={[styles.title, { color: theme.primary }]}>{t('chick_details')}</Text>
+          <Icon name={collapsedSections.chickDetails ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsedSections.chickDetails}>
+          <View style={styles.sectionContent}>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('total_chicks')}: {item.chickDetails.totalChicks}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('healthy_chicks')}: {item.chickDetails.healthyChicks}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('sick_chicks')}: {item.chickDetails.sickChicks}</Text>
+          </View>
+        </Collapsible>
 
-      <TouchableOpacity onPress={() => toggleSection('healthReport')} style={styles.sectionHeader}>
-        <Text style={[styles.title, { color: theme.primary }]}>Health Report</Text>
-        <Icon name={collapsedSections.healthReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <Collapsible collapsed={collapsedSections.healthReport}>
-        <View style={styles.sectionContent}>
-          <Text style={[styles.detailText, { color: theme.text }]}>Vaccinated: {item.healthReport.vaccinated}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Not Vaccinated: {item.healthReport.notVaccinated}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Diseases: {item.healthReport.diseases}</Text>
-        </View>
-      </Collapsible>
+        <TouchableOpacity onPress={() => toggleSection('healthReport')} style={styles.sectionHeader}>
+          <Text style={[styles.title, { color: theme.primary }]}>{t('health_report')}</Text>
+          <Icon name={collapsedSections.healthReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsedSections.healthReport}>
+          <View style={styles.sectionContent}>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('vaccinated')}: {item.healthReport.vaccinated}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('not_vaccinated')}: {item.healthReport.notVaccinated}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('diseases')}: {item.healthReport.diseases}</Text>
+          </View>
+        </Collapsible>
 
-      <TouchableOpacity onPress={() => toggleSection('dailyReport')} style={styles.sectionHeader}>
-        <Text style={[styles.title, { color: theme.primary }]}>Daily Report</Text>
-        <Icon name={collapsedSections.dailyReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <Collapsible collapsed={collapsedSections.dailyReport}>
-        <View style={styles.sectionContent}>
-          <Text style={[styles.detailText, { color: theme.text }]}>Eggs Collected: {item.dailyReport.eggsCollected}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Mortality Rate: {item.dailyReport.mortalityRate}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Feed Consumed: {item.dailyReport.feedConsumed} kg</Text>
-          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: Rs.{item.dailyReport.income}</Text>
-          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: Rs.{item.dailyReport.expenses}</Text>
-        </View>
-      </Collapsible>
+        <TouchableOpacity onPress={() => toggleSection('dailyReport')} style={styles.sectionHeader}>
+          <Text style={[styles.title, { color: theme.primary }]}>{t('daily_report')}</Text>
+          <Icon name={collapsedSections.dailyReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsedSections.dailyReport}>
+          <View style={styles.sectionContent}>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('eggs_collected')}: {item.dailyReport.eggsCollected}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('mortality_rate')}: {item.dailyReport.mortalityRate}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('feed_consumed')}: {item.dailyReport.feedConsumed} kg</Text>
+            <Text style={[styles.incomeText, { color: theme.primary }]}>{t('income')}: Rs.{item.dailyReport.income}</Text>
+            <Text style={[styles.expenseText, { color: theme.primary }]}>{t('expenses')}: Rs.{item.dailyReport.expenses}</Text>
+          </View>
+        </Collapsible>
 
-      <TouchableOpacity onPress={() => toggleSection('monthlyReport')} style={styles.sectionHeader}>
-        <Text style={[styles.title, { color: theme.primary }]}>Monthly Report</Text>
-        <Icon name={collapsedSections.monthlyReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
-      </TouchableOpacity>
-      <Collapsible collapsed={collapsedSections.monthlyReport}>
-        <View style={styles.sectionContent}>
-          <Text style={[styles.detailText, { color: theme.text }]}>Eggs Collected: {item.monthlyReport.eggsCollected}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Mortality Rate: {item.monthlyReport.mortalityRate}</Text>
-          <Text style={[styles.detailText, { color: theme.text }]}>Feed Consumed: {item.monthlyReport.feedConsumed} kg</Text>
-          <Text style={[styles.incomeText, { color: theme.primary }]}>Income: Rs.{item.monthlyReport.income}</Text>
-          <Text style={[styles.expenseText, { color: theme.primary }]}>Expenses: Rs.{item.monthlyReport.expenses}</Text>
-        </View>
-      </Collapsible>
-    </View>
+        <TouchableOpacity onPress={() => toggleSection('monthlyReport')} style={styles.sectionHeader}>
+          <Text style={[styles.title, { color: theme.primary }]}>{t('monthly_report')}</Text>
+          <Icon name={collapsedSections.monthlyReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsedSections.monthlyReport}>
+          <View style={styles.sectionContent}>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('eggs_collected')}: {item.monthlyReport.eggsCollected}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('mortality_rate')}: {item.monthlyReport.mortalityRate}</Text>
+            <Text style={[styles.detailText, { color: theme.text }]}>{t('feed_consumed')}: {item.monthlyReport.feedConsumed} kg</Text>
+            <Text style={[styles.incomeText, { color: theme.primary }]}>{t('income')}: Rs.{item.monthlyReport.income}</Text>
+            <Text style={[styles.expenseText, { color: theme.primary }]}>{t('expenses')}: Rs.{item.monthlyReport.expenses}</Text>
+          </View>
+        </Collapsible>
+      </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.message, { color: theme.text }]}>Please choose a farm to view its report:</Text>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select a farm"
-        onChangeValue={(itemValue) => {
-          setSelectedFarm(itemValue);
-        }}
-        style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
-        dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
-        textStyle={{ color: theme.text }}
-        placeholderStyle={{ color: theme.text }}
-        arrowIconStyle={{ tintColor: theme.text }}
-      />
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[styles.message, { color: theme.text }]}>{t('please_choose_farm')}</Text>
+        <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder={t('select_farm')}
+            onChangeValue={(itemValue) => {
+              setSelectedFarm(itemValue);
+            }}
+            style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
+            dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
+            textStyle={{ color: theme.text }}
+            placeholderStyle={{ color: theme.text }}
+            arrowIconStyle={{ tintColor: theme.text }}
+        />
 
-      {selectedFarm ? (
-        <>
-          <FlatList
-            data={farms.filter(farm => farm.name === selectedFarm)}
-            renderItem={renderFarmDetail}
-            keyExtractor={item => item.name}
-          />
-
-        </>
-      ) : (
-        <Image source={require('../../assets/chick_report.png')} style={styles.placeholderImage} />
-      )}
-    </View>
+        {selectedFarm ? (
+            <>
+              <FlatList
+                  data={farms.filter(farm => farm.name === selectedFarm)}
+                  renderItem={renderFarmDetail}
+                  keyExtractor={item => item.name}
+              />
+            </>
+        ) : (
+            <Image source={require('../../assets/chick_report.png')} style={styles.placeholderImage} />
+        )}
+      </View>
   );
 };
 
@@ -251,7 +249,7 @@ const styles = StyleSheet.create({
   },
   placeholderImage: {
     width: '100%',
-    height:'50%',
+    height: '50%',
     resizeMode: 'contain',
     marginTop: 120,
   },

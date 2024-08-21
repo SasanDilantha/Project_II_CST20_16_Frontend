@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 
 const initialFarms = [
   { id: 1, name: 'Farm 1', startedChickCount: 200, currentChickCount: 150, location: 'Location 1', blockCount: 5 },
@@ -11,6 +12,7 @@ const initialFarms = [
 
 const FarmDetailsScreen = ({ navigation }) => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Initialize the translation hook
   const [farms, setFarms] = useState(initialFarms);
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -61,7 +63,7 @@ const FarmDetailsScreen = ({ navigation }) => {
     if (password === 'admin') {
       toggleConfirmModal();
     } else {
-      alert('Incorrect password');
+      alert(t('incorrect_password'));
     }
   };
 
@@ -72,65 +74,67 @@ const FarmDetailsScreen = ({ navigation }) => {
   };
 
   return (
-      <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-        {farms.map((farm) => (
-            <TouchableOpacity
-                key={farm.id}
-                style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}
-                onPress={() => navigation.navigate('FarmDetail', { farm })}
-            >
-              <View style={styles.cardContent}>
-                <Icon name="home" size={30} color={theme.primary} style={styles.icon} />
-                <View style={styles.textContainer}>
-                  <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
-                  <Text style={{ color: theme.text }}>Started Chick Count: {farm.startedChickCount}</Text>
-                  <Text style={{ color: theme.text }}>Remaining Chick Count: {farm.currentChickCount}</Text>
-                  <Text style={{ color: theme.text }}>Location: {farm.location}</Text>
-                  <Text style={{ color: theme.text }}>Block Count: {farm.blockCount}</Text>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+          {farms.map((farm) => (
+              <TouchableOpacity
+                  key={farm.id}
+                  style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}
+                  onPress={() => navigation.navigate('FarmDetail', { farm })}
+              >
+                <View style={styles.cardContent}>
+                  <Icon name="home" size={30} color={theme.primary} style={styles.icon} />
+                  <View style={styles.textContainer}>
+                    <Text style={[styles.title, { color: theme.text }]}>{farm.name}</Text>
+                    <Text style={{ color: theme.text }}>{t('started_chick_count')}: {farm.startedChickCount}</Text>
+                    <Text style={{ color: theme.text }}>{t('remaining_chick_count')}: {farm.currentChickCount}</Text>
+                    <Text style={{ color: theme.text }}>{t('location')}: {farm.location}</Text>
+                    <Text style={{ color: theme.text }}>{t('block_count')}: {farm.blockCount}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => toggleDeleteModal(farm)}>
+                    <Icon name="delete" size={30} color={theme.primary} style={styles.deleteIcon} />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => toggleDeleteModal(farm)}>
-                  <Icon name="delete" size={30} color={theme.primary} style={styles.deleteIcon} />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-        ))}
-        <TouchableOpacity style={styles.addButton} onPress={toggleAddModal}>
-          <Icon name="plus-circle" size={50} color={theme.primary} />
-        </TouchableOpacity>
+              </TouchableOpacity>
+          ))}
+          <TouchableOpacity style={styles.addButton} onPress={toggleAddModal}>
+            <Icon name="plus-circle" size={50} color={theme.primary} />
+          </TouchableOpacity>
+        </ScrollView>
 
         {/* Add Farm Modal */}
         <Modal visible={isAddModalVisible} transparent={true}>
           <View style={styles.modalContainer}>
             <View style={[styles.modalContent, { backgroundColor: theme.cardBackground }]}>
-              <Text style={[styles.modalTitle, { color: theme.text }]}>Add Farm</Text>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_farm')}</Text>
               <TextInput
-                  placeholder="Name"
+                  placeholder={t('name')}
                   style={[styles.input, { color: theme.text }]}
                   onChangeText={(text) => setFarmDetails({ ...farmDetails, name: text })}
                   value={farmDetails.name}
               />
               <TextInput
-                  placeholder="Location"
+                  placeholder={t('location')}
                   style={[styles.input, { color: theme.text }]}
                   onChangeText={(text) => setFarmDetails({ ...farmDetails, location: text })}
                   value={farmDetails.location}
               />
               <TextInput
-                  placeholder="Block Count"
+                  placeholder={t('block_count')}
                   style={[styles.input, { color: theme.text }]}
                   keyboardType="numeric"
                   onChangeText={(text) => setFarmDetails({ ...farmDetails, blockCount: text })}
                   value={farmDetails.blockCount}
               />
               <TextInput
-                  placeholder="Manager Details"
+                  placeholder={t('manager_details')}
                   style={[styles.input, { color: theme.text }]}
                   onChangeText={(text) => setFarmDetails({ ...farmDetails, managerDetails: text })}
                   value={farmDetails.managerDetails}
               />
               <View style={styles.buttonContainer}>
-                <Button title="Cancel" onPress={toggleAddModal} color={theme.primary} />
-                <Button title="Add" onPress={handleAddFarm} color={theme.primary} />
+                <Button title={t('cancel')} onPress={toggleAddModal} color={theme.primary} />
+                <Button title={t('add')} onPress={handleAddFarm} color={theme.primary} />
               </View>
             </View>
           </View>
@@ -140,20 +144,20 @@ const FarmDetailsScreen = ({ navigation }) => {
         <Modal visible={isDeleteModalVisible} transparent={true}>
           <View style={styles.modalContainer}>
             <View style={[styles.modalContent, { backgroundColor: theme.cardBackground }]}>
-              <Text style={[styles.modalTitle, { color: theme.text }]}>Delete Farm</Text>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{t('delete_farm')}</Text>
               <Text style={[styles.modalText, { color: theme.text }]}>
-                Are you sure you want to delete {selectedFarm?.name}?
+                {t('delete_confirmation')} {selectedFarm?.name}?
               </Text>
               <TextInput
-                  placeholder="Password"
+                  placeholder={t('password')}
                   style={[styles.input, { color: theme.text }]}
                   secureTextEntry={true}
                   value={password}
                   onChangeText={setPassword}
               />
               <View style={styles.buttonContainer}>
-                <Button title="Cancel" onPress={toggleDeleteModal} color={theme.primary} />
-                <Button title="Delete" onPress={handleDeleteFarm} color={theme.primary} />
+                <Button title={t('cancel')} onPress={toggleDeleteModal} color={theme.primary} />
+                <Button title={t('delete')} onPress={handleDeleteFarm} color={theme.primary} />
               </View>
             </View>
           </View>
@@ -163,18 +167,18 @@ const FarmDetailsScreen = ({ navigation }) => {
         <Modal visible={isConfirmModalVisible} transparent={true}>
           <View style={styles.modalContainer}>
             <View style={[styles.modalContent, { backgroundColor: theme.cardBackground }]}>
-              <Text style={[styles.modalTitle, { color: theme.text }]}>Confirm Delete</Text>
+              <Text style={[styles.modalTitle, { color: theme.text }]}>{t('confirm_delete')}</Text>
               <Text style={[styles.modalText, { color: theme.text }]}>
-                The following farm will be deleted: {selectedFarm?.name}
+                {t('farm_to_be_deleted')}: {selectedFarm?.name}
               </Text>
               <View style={styles.buttonContainer}>
-                <Button title="Cancel" onPress={toggleConfirmModal} color={theme.primary} />
-                <Button title="OK" onPress={confirmDeleteFarm} color={theme.primary} />
+                <Button title={t('cancel')} onPress={toggleConfirmModal} color={theme.primary} />
+                <Button title={t('ok')} onPress={confirmDeleteFarm} color={theme.primary} />
               </View>
             </View>
           </View>
         </Modal>
-      </ScrollView>
+      </View>
   );
 };
 

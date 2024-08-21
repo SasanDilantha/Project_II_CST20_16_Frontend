@@ -2,25 +2,26 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const monitoringData = [
-  { 
-    id: '1', 
-    name: 'Block A', 
-    temperature: 24, 
-    ammoniaLevel: 20 
+  {
+    id: '1',
+    name: 'Block A',
+    temperature: 24,
+    ammoniaLevel: 20
   },
-  { 
-    id: '2', 
-    name: 'Block B', 
-    temperature: 25, 
-    ammoniaLevel: 18 
+  {
+    id: '2',
+    name: 'Block B',
+    temperature: 25,
+    ammoniaLevel: 18
   },
-  { 
-    id: '3', 
-    name: 'Block C', 
-    temperature: 26, 
-    ammoniaLevel: 22 
+  {
+    id: '3',
+    name: 'Block C',
+    temperature: 26,
+    ammoniaLevel: 22
   },
 ];
 
@@ -28,31 +29,32 @@ const getPercentage = (value, max) => (value / max) * 100;
 
 const MonitoringScreen = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-      {monitoringData.map((block) => (
-        <View key={block.id} style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
-          <Text style={[styles.cardTitle, { color: theme.primary }]}>{block.name}</Text>
-          
-          <View style={styles.detailRow}>
-            <Icon name="thermometer" size={20} color={theme.iconColor} style={styles.icon} />
-            <Text style={[styles.detailText, { color: theme.text }]}>Temperature: {block.temperature}°C</Text>
-          </View>
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${getPercentage(block.temperature, 40)}%`, backgroundColor: 'coral' }]} />
-          </View>
-          
-          <View style={styles.detailRow}>
-            <Icon name="chemical-weapon" size={20} color={theme.iconColor} style={styles.icon} />
-            <Text style={[styles.detailText, { color: theme.text }]}>Ammonia Level: {block.ammoniaLevel} ppm</Text>
-          </View>
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${getPercentage(block.ammoniaLevel, 50)}%`, backgroundColor: 'darkorange' }]} />
-          </View>
-        </View>
-      ))}
-    </ScrollView>
+      <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+        {monitoringData.map((block) => (
+            <View key={block.id} style={[styles.card, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
+              <Text style={[styles.cardTitle, { color: theme.primary }]}>{block.name}</Text>
+
+              <View style={styles.detailRow}>
+                <Icon name="thermometer" size={20} color={theme.iconColor} style={styles.icon} />
+                <Text style={[styles.detailText, { color: theme.text }]}>{t('temperature')}: {block.temperature}°C</Text>
+              </View>
+              <View style={styles.progressBarContainer}>
+                <View style={[styles.progressBar, { width: `${getPercentage(block.temperature, 40)}%`, backgroundColor: 'coral' }]} />
+              </View>
+
+              <View style={styles.detailRow}>
+                <Icon name="chemical-weapon" size={20} color={theme.iconColor} style={styles.icon} />
+                <Text style={[styles.detailText, { color: theme.text }]}>{t('ammonia_level')}: {block.ammoniaLevel} ppm</Text>
+              </View>
+              <View style={styles.progressBarContainer}>
+                <View style={[styles.progressBar, { width: `${getPercentage(block.ammoniaLevel, 50)}%`, backgroundColor: 'darkorange' }]} />
+              </View>
+            </View>
+        ))}
+      </ScrollView>
   );
 };
 

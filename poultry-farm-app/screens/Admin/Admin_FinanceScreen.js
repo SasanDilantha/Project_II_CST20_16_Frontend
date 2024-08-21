@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 
 const FinanceScreen = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation(); // Initialize the translation hook
+
   const [transactions, setTransactions] = useState([
     { "id": "1", "amount": "800", "description": "Chicken sales", "type": "income", "date": "2024-06-01", "farm": "Happy Farm" },
     { "id": "2", "amount": "200", "description": "Feed purchase", "type": "expense", "date": "2024-06-02", "farm": "Happy Farm" },
@@ -22,7 +25,7 @@ const FinanceScreen = () => {
     { "id": "14", "amount": "900", "description": "Chicken sales", "type": "income", "date": "2024-06-14", "farm": "Sunshine Farm" },
     { "id": "15", "amount": "150", "description": "Feed purchase", "type": "expense", "date": "2024-06-15", "farm": "Happy Farm" }
   ]);
-  
+
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('income'); // 'income' or 'expense'
@@ -32,8 +35,8 @@ const FinanceScreen = () => {
   const [filterType, setFilterType] = useState('all'); // 'all', 'income', 'expense'
 
   const [items, setItems] = useState([
-    { label: 'Happy Farm', value: 'Happy Farm' },
-    { label: 'Sunshine Farm', value: 'Sunshine Farm' }
+    { label: t('happy_farm'), value: 'Happy Farm' },
+    { label: t('sunshine_farm'), value: 'Sunshine Farm' }
   ]);
 
   const addTransaction = () => {
@@ -42,7 +45,7 @@ const FinanceScreen = () => {
       setAmount('');
       setDescription('');
     } else {
-      alert('Please fill out all fields and select a farm');
+      alert(t('fill_all_fields'));
     }
   };
 
@@ -55,82 +58,82 @@ const FinanceScreen = () => {
   const totalExpenses = transactions.filter(t => t.farm === selectedFarm && t.type === 'expense').reduce((acc, t) => acc + parseFloat(t.amount), 0).toFixed(2);
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.message, { color: theme.text }]}>Please choose a farm to view its finance:</Text>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-        placeholder="Select a farm"
-        onChangeValue={(itemValue) => {
-          setSelectedFarm(itemValue);
-        }}
-        style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
-        dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
-        textStyle={{ color: theme.text }}
-        placeholderStyle={{ color: theme.text }}
-        arrowIconStyle={{ tintColor: theme.text }}
-      />
+      <View style={[styles.container, { backgroundColor: theme.background }]}>
+        <Text style={[styles.message, { color: theme.text }]}>{t('please_choose_farm')}</Text>
+        <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder={t('select_farm')}
+            onChangeValue={(itemValue) => {
+              setSelectedFarm(itemValue);
+            }}
+            style={[styles.picker, { backgroundColor: theme.cardBackground, borderColor: theme.borderColor }]}
+            dropDownContainerStyle={{ backgroundColor: theme.cardBackground, borderColor: theme.borderColor }}
+            textStyle={{ color: theme.text }}
+            placeholderStyle={{ color: theme.text }}
+            arrowIconStyle={{ tintColor: theme.text }}
+        />
 
-      {selectedFarm ? (
-        <>
-          <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
-            <Text style={[styles.summaryTitle, { color: theme.primary }]}>Farm: {selectedFarm}</Text>
-            <View style={styles.summaryContent}>
-              <Text style={[styles.summaryText, { color: theme.primary }]}>Total Income: </Text>
-              <Text style={[styles.summaryAmount, { color: 'green' }]}>Rs.{totalIncome}</Text>
-            </View>
-            <View style={styles.summaryContent}>
-              <Text style={[styles.summaryText, { color: theme.primary }]}>Total Expenses: </Text>
-              <Text style={[styles.summaryAmount, { color: 'red' }]}>Rs.{totalExpenses}</Text>
-            </View>
-          </View>
-
-          <View style={styles.filterRow}>
-            <TouchableOpacity
-              style={[styles.filterButton, filterType === 'all' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
-              onPress={() => setFilterType('all')}
-            >
-              <Text style={[styles.buttonText, { color: theme.buttonText }]}>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.filterButton, filterType === 'income' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
-              onPress={() => setFilterType('income')}
-            >
-              <Text style={[styles.buttonText, { color: theme.buttonText }]}>Income</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.filterButton, filterType === 'expense' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
-              onPress={() => setFilterType('expense')}
-            >
-              <Text style={[styles.buttonText, { color: theme.buttonText }]}>Expense</Text>
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={filteredTransactions}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={[styles.transaction, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
-                <View style={styles.transactionDetails}>
-                  <Text style={[styles.transactionText, { color: theme.text }]}>{item.description}</Text>
-                  <Text style={[styles.transactionDate, { color: theme.text }]}>{item.date}</Text>
+        {selectedFarm ? (
+            <>
+              <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
+                <Text style={[styles.summaryTitle, { color: theme.primary }]}>{t('farm')}: {selectedFarm}</Text>
+                <View style={styles.summaryContent}>
+                  <Text style={[styles.summaryText, { color: theme.primary }]}>{t('total_income')}: </Text>
+                  <Text style={[styles.summaryAmount, { color: 'green' }]}>Rs.{totalIncome}</Text>
                 </View>
-                <Text style={[styles.transactionAmount, { color: item.type === 'income' ? 'green' : 'red' }]}>
-                  {item.type === 'income' ? '+' : '-'}Rs.{item.amount}
-                </Text>
+                <View style={styles.summaryContent}>
+                  <Text style={[styles.summaryText, { color: theme.primary }]}>{t('total_expenses')}: </Text>
+                  <Text style={[styles.summaryAmount, { color: 'red' }]}>Rs.{totalExpenses}</Text>
+                </View>
               </View>
-            )}
-            style={styles.transactionList}
-          />
-        </>
-      ) : (
-        <Image source={require('../../assets/chick_finance.png')} style={styles.placeholderImage} />
-      )}
-    </View>
+
+              <View style={styles.filterRow}>
+                <TouchableOpacity
+                    style={[styles.filterButton, filterType === 'all' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
+                    onPress={() => setFilterType('all')}
+                >
+                  <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('all')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.filterButton, filterType === 'income' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
+                    onPress={() => setFilterType('income')}
+                >
+                  <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('income')}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.filterButton, filterType === 'expense' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
+                    onPress={() => setFilterType('expense')}
+                >
+                  <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('expense')}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <FlatList
+                  data={filteredTransactions}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                      <View style={[styles.transaction, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
+                        <View style={styles.transactionDetails}>
+                          <Text style={[styles.transactionText, { color: theme.text }]}>{item.description}</Text>
+                          <Text style={[styles.transactionDate, { color: theme.text }]}>{item.date}</Text>
+                        </View>
+                        <Text style={[styles.transactionAmount, { color: item.type === 'income' ? 'green' : 'red' }]}>
+                          {item.type === 'income' ? '+' : '-'}Rs.{item.amount}
+                        </Text>
+                      </View>
+                  )}
+                  style={styles.transactionList}
+              />
+            </>
+        ) : (
+            <Image source={require('../../assets/chick_finance.png')} style={styles.placeholderImage} />
+        )}
+      </View>
   );
 };
 
