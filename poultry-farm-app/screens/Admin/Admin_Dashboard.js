@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FarmDetailsScreen from './Admin_FarmDetailsScreen';
 import FinanceScreen from './Admin_FinanceScreen';
 import ReportScreen from './Admin_ReportScreen';
 import UserManagementScreen from './Admin_UserManagementScreen';
 import NotificationScreen from './Admin_NotificationScreen';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 
 const Tab = createBottomTabNavigator();
 const { width } = Dimensions.get('window');
 
 const SidePanel = ({ visible, onClose, navigation }) => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
   const slideAnim = useState(new Animated.Value(width))[0];
   const [isEnabled, setIsEnabled] = useState(theme.mode === 'dark');
 
@@ -40,20 +44,29 @@ const SidePanel = ({ visible, onClose, navigation }) => {
 
   const handleLogout = () => {
     Alert.alert(
-        'Logout',
-        'Are you sure you want to logout?',
+        t('logout'),
+        t('logout_confirmation'),
         [
           {
-            text: 'Cancel',
+            text: t('cancel'),
             style: 'cancel',
           },
           {
-            text: 'Logout',
+            text: t('logout'),
             onPress: () => navigation.replace('Login'),
           },
         ],
         { cancelable: true }
     );
+  };
+
+  const handleViewRecords = () => {
+    navigation.navigate('PastRecords');
+    onClose();
+  };
+
+  const switchLanguage = (language) => {
+    i18n.changeLanguage(language);
   };
 
   return (
@@ -63,43 +76,72 @@ const SidePanel = ({ visible, onClose, navigation }) => {
           visible={visible}
           onRequestClose={onClose}
       >
-        <View style={styles.modalContainer}>
-          <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
-            <View style={styles.sidePanelHeader}>
-              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Admin</Text>
-              <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
-                <MaterialIcons name="menu" size={24} color={theme.primary} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.profileContainer}>
-              <Image
-                  source={require('../../assets/admin_profile.png')} // Replace with your profile image URL
-                  style={styles.profileImage}
-              />
-              <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
-              <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
-            </View>
-            <View style={styles.themeToggleContainer}>
-              <Text style={[styles.sidePanelTitle, { color: theme.text }]}>Switch Theme</Text>
-              <Switch
-                  trackColor={{ false: "#767577", true: theme.primary }}
-                  thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
-                  onValueChange={toggleSwitch}
-                  value={isEnabled}
-              />
-            </View>
-            <View style={styles.flexSpacer} />
-            <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: theme.primary }]}>
-              <Text style={[styles.logoutButtonText, { color: theme.text }]}>Logout</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <Animated.View style={[styles.sidePanel, { transform: [{ translateX: slideAnim }], backgroundColor: theme.background }]}>
+                <View style={styles.sidePanelHeader}>
+                  <Text style={[styles.sidePanelTitle, { color: theme.text }]}>{t('admin')}</Text>
+                  <TouchableOpacity onPress={onClose} style={styles.menuIconContainer}>
+                    <MaterialIcons name="menu" size={24} color={theme.primary} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.profileContainer}>
+                  <Image
+                      source={require('../../assets/admin_profile.png')}
+                      style={styles.profileImage}
+                  />
+                  <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
+                  <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
+                </View>
+
+                {/* Theme Toggle with Sun and Moon Icons */}
+                <View style={styles.themeToggleContainer}>
+                  <Text style={[styles.sidePanelTitle, { color: theme.text }]}>{t('switch_theme')}</Text>
+                  <TouchableOpacity onPress={toggleSwitch} style={styles.iconButton}>
+                    <MaterialCommunityIcons
+                        name={isEnabled ? "weather-night" : "weather-sunny"}
+                        size={30}
+                        color={isEnabled ? "#FFD700" : "#FFA500"}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity onPress={handleViewRecords} style={[styles.recordsButton, { backgroundColor: theme.primary }]}>
+                  <Text style={[styles.recordsButtonText, { color: theme.text }]}>{t('view_past_records')}</Text>
+                </TouchableOpacity>
+                <View style={styles.flexSpacer} />
+
+                {/* Custom Language Switcher */}
+                <View style={[styles.languageSwitcher, { borderColor: theme.primary }]}>
+                  <TouchableOpacity
+                      style={[styles.languageOption, i18n.language === 'en' ? { backgroundColor: theme.primary } : { backgroundColor: theme.inputBackground }]}
+                      onPress={() => switchLanguage('en')}
+                  >
+                    <Text style={[styles.languageText, { color: theme.text }]}>{t('en')}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                      style={[styles.languageOption, i18n.language === 'si' ? { backgroundColor: theme.primary } : { backgroundColor: theme.inputBackground }]}
+                      onPress={() => switchLanguage('si')}
+                  >
+                    <Text style={[styles.languageText, { color: theme.text }]}>{t('si')}</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity onPress={handleLogout} style={[styles.logoutButton, { backgroundColor: theme.primary }]}>
+                  <Text style={[styles.logoutButtonText, { color: theme.text }]}>{t('logout')}</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
   );
 };
 
 const AdminDashboard = ({ navigation }) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [isSidePanelVisible, setIsSidePanelVisible] = useState(false);
 
   const toggleSidePanel = () => {
@@ -148,11 +190,31 @@ const AdminDashboard = ({ navigation }) => {
               ),
             })}
         >
-          <Tab.Screen name="Finance" component={FinanceScreen} />
-          <Tab.Screen name="Report" component={ReportScreen} />
-          <Tab.Screen name="FarmDetails" component={FarmDetailsScreen} />
-          <Tab.Screen name="UserManagement" component={UserManagementScreen} />
-          <Tab.Screen name="Notification" component={NotificationScreen} />
+          <Tab.Screen
+              name="Finance"
+              component={FinanceScreen}
+              options={{ title: t('finance') }}
+          />
+          <Tab.Screen
+              name="Report"
+              component={ReportScreen}
+              options={{ title: t('report') }}
+          />
+          <Tab.Screen
+              name="FarmDetails"
+              component={FarmDetailsScreen}
+              options={{ title: t('farm_details') }}
+          />
+          <Tab.Screen
+              name="UserManagement"
+              component={UserManagementScreen}
+              options={{ title: t('user_management') }}
+          />
+          <Tab.Screen
+              name="Notification"
+              component={NotificationScreen}
+              options={{ title: t('notification') }}
+          />
         </Tab.Navigator>
         <SidePanel visible={isSidePanelVisible} onClose={toggleSidePanel} navigation={navigation} />
       </View>
@@ -220,6 +282,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 20,
+  },
+  iconButton: {
+    padding: 5,
+  },
+  recordsButton: {
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  recordsButtonText: {
+    fontSize: 18,
+    textAlign: 'center',
   },
   flexSpacer: {
     flex: 1,
@@ -227,10 +302,29 @@ const styles = StyleSheet.create({
   logoutButton: {
     padding: 10,
     borderRadius: 5,
+    marginTop: 20,
   },
   logoutButtonText: {
     fontSize: 18,
     textAlign: 'center',
+  },
+  languageSwitcher: {
+    flexDirection: 'row',
+    marginTop: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    width: 120,
+    height: 40,
+  },
+  languageOption: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  languageText: {
+    fontSize: 16,
   },
 });
 

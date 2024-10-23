@@ -5,6 +5,8 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 import { ThemeProvider, useTheme } from './theme/ThemeContext';
+import { I18nextProvider } from 'react-i18next'; // Import I18nextProvider
+import i18n from './i18n'; // Import i18n configuration
 
 // Direct imports for screens
 import SplashScreen from './screens/Auth/SplashScreen';
@@ -24,7 +26,7 @@ import NotificationScreen from './screens/Admin/Admin_NotificationScreen';
 import UserManagementScreen from './screens/Admin/Admin_UserManagementScreen';
 
 // Farm Manager imports
-import FarmManagerDashboard from './screens/Farm_manager/FarmManagerDashboard'; // Import FarmManagerDashboard
+import FarmManagerDashboard from './screens/Farm_manager/FarmManagerDashboard';
 import FarmManagerFarmDetailsScreen from './screens/Farm_manager/FarmDetails_FarmManager/FarmManagerFarmDetailsScreen';
 import FarmManager_ChickInventoryScreen from './screens/Farm_manager/FarmDetails_FarmManager/FarmManager_ChickInventoryScreen';
 import FarmManager_FeedInventoryScreen from './screens/Farm_manager/FarmDetails_FarmManager/FarmManager_FeedInventoryScreen';
@@ -96,11 +98,13 @@ const AppNavigator = () => {
 
 const App = () => {
     return (
-        <ThemeProvider>
-            <View style={{ flex: 1 }}>
-                <AppNavigator />
-            </View>
-        </ThemeProvider>
+        <I18nextProvider i18n={i18n}> {/* Wrap your app with I18nextProvider */}
+            <ThemeProvider>
+                <View style={{ flex: 1 }}>
+                    <AppNavigator />
+                </View>
+            </ThemeProvider>
+        </I18nextProvider>
     );
 };
 

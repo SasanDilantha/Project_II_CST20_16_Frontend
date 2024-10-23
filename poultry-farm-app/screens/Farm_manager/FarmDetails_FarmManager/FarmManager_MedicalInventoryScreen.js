@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../../theme/ThemeContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTranslation } from 'react-i18next';
 
 const initialMedicals = [
     { id: '1', block: 'Block A', supplier: 'Supplier A', drug: 'Vaccine A', quantity: '50 doses', cost: '1000', date: '2024-01-01', expireDate: '2024-06-01' },
@@ -13,6 +14,7 @@ const initialMedicals = [
 
 const MedicalInventoryScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
     const [medicals, setMedicals] = useState(initialMedicals);
     const [modalVisible, setModalVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
@@ -35,13 +37,13 @@ const MedicalInventoryScreen = () => {
             setPasswordModalVisible(false);
             setPassword('');
         } else {
-            Alert.alert('Error', 'Incorrect password. Please try again.');
+            Alert.alert(t('error'), t('incorrect_password'));
         }
     };
 
     const handleAddMedical = () => {
         if (!newMedical.block || !newMedical.supplier || !newMedical.drug || !newMedical.quantity || !newMedical.cost || !newMedical.date || !newMedical.expireDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
@@ -63,7 +65,7 @@ const MedicalInventoryScreen = () => {
 
     const handleEditMedical = () => {
         if (!editMedical.supplier || !editMedical.drug || !editMedical.quantity || !editMedical.cost || !editMedical.date || !editMedical.expireDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
@@ -101,27 +103,27 @@ const MedicalInventoryScreen = () => {
                         <View style={styles.medicalDetails}>
                             <View style={styles.detailRow}>
                                 <Icon name="pill" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Drug: {medical.drug}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('drug')}: {medical.drug}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {medical.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {medical.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {medical.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {medical.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Cost: {medical.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {medical.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {medical.date}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {medical.date}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Expire Date: {medical.expireDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('expire_date')}: {medical.expireDate}</Text>
                             </View>
                             <View style={styles.actionButtons}>
                                 <TouchableOpacity onPress={() => handleOpenEditModal(medical)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
@@ -139,13 +141,15 @@ const MedicalInventoryScreen = () => {
             <TouchableOpacity style={[styles.floatingButton, { backgroundColor: theme.primary }]} onPress={() => { setModalVisible(true); setDatePickerFor('newDate'); }}>
                 <MaterialIcons name="add" size={30} color="#fff" />
             </TouchableOpacity>
+
+            {/* Add Medical Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Add New Medical</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_new_medical')}</Text>
 
                         <TextInput
-                            placeholder="Block"
+                            placeholder={t('block')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newMedical.block}
@@ -153,7 +157,7 @@ const MedicalInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Supplier"
+                            placeholder={t('supplier')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newMedical.supplier}
@@ -161,7 +165,7 @@ const MedicalInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Drug"
+                            placeholder={t('drug')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newMedical.drug}
@@ -169,7 +173,7 @@ const MedicalInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Quantity"
+                            placeholder={t('quantity')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newMedical.quantity}
@@ -177,7 +181,7 @@ const MedicalInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Cost"
+                            placeholder={t('cost')}
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
@@ -186,7 +190,7 @@ const MedicalInventoryScreen = () => {
                         />
 
                         <View>
-                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
@@ -197,7 +201,7 @@ const MedicalInventoryScreen = () => {
                                 />
                             </TouchableOpacity>
 
-                            <Text style={[styles.label, { color: theme.text }]}>Expire Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newExpireDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
@@ -219,44 +223,82 @@ const MedicalInventoryScreen = () => {
 
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleAddMedical}>
-                                <Text style={styles.buttonText}>Add</Text>
+                                <Text style={styles.buttonText}>{t('add')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
 
+            {/* Edit Medical Modal */}
             <Modal visible={editModalVisible} animationType="slide" transparent={true} onRequestClose={() => setEditModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Edit Medical</Text>
-                        <TextInput placeholder="Block" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editMedical.block} editable={false} />
-                        <TextInput placeholder="Supplier" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editMedical.supplier} onChangeText={(text) => setEditMedical({ ...editMedical, supplier: text })} />
-                        <TextInput placeholder="Drug" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editMedical.drug} onChangeText={(text) => setEditMedical({ ...editMedical, drug: text })} />
-                        <TextInput placeholder="Quantity" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editMedical.quantity} onChangeText={(text) => setEditMedical({ ...editMedical, quantity: text })} />
-                        <TextInput placeholder="Cost" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editMedical.cost} onChangeText={(text) => setEditMedical({ ...editMedical, cost: text })} />
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('edit_medical')}</Text>
+
+                        <TextInput
+                            placeholder={t('block')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editMedical.block}
+                            editable={false}
+                        />
+
+                        <TextInput
+                            placeholder={t('supplier')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editMedical.supplier}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, supplier: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('drug')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editMedical.drug}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, drug: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('quantity')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editMedical.quantity}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, quantity: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('cost')}
+                            keyboardType="numeric"
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editMedical.cost}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, cost: text })}
+                        />
+
                         <View>
-                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
-                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newDate'); }}>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
-                                    value={newMedical.date}
+                                    value={editMedical.date}
                                     editable={false}
                                 />
                             </TouchableOpacity>
 
-                            <Text style={[styles.label, { color: theme.text }]}>Expire Date</Text>
-                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newExpireDate'); }}>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editExpireDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
-                                    value={newMedical.expireDate}
+                                    value={editMedical.expireDate}
                                     editable={false}
                                 />
                             </TouchableOpacity>
@@ -271,33 +313,37 @@ const MedicalInventoryScreen = () => {
                         )}
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setEditModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleEditMedical}>
-                                <Text style={styles.buttonText}>Save</Text>
+                                <Text style={styles.buttonText}>{t('save')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
+
+            {/* Password Modal */}
             <Modal visible={passwordModalVisible} animationType="slide" transparent={true} onRequestClose={() => setPasswordModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Enter Password</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('enter_password')}</Text>
+
                         <TextInput
-                            placeholder="Password"
+                            placeholder={t('password')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry
                         />
+
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setPasswordModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={confirmDelete}>
-                                <Text style={styles.buttonText}>Confirm</Text>
+                                <Text style={styles.buttonText}>{t('confirm')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

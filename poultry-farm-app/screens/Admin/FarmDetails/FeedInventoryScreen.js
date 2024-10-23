@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 // Example data grouped by blocks
 const blocks = [
@@ -9,27 +10,25 @@ const blocks = [
     name: 'Block A',
     feeds: [
       { id: '1', supplier: 'Supplier A', type: 'Starter Feed', quantity: '500 kg', cost: 'Rs.20000', date: '2024-01-01', expireDate: '2024-06-01' },
-      // Add more feeds if needed
     ],
   },
   {
     name: 'Block B',
     feeds: [
       { id: '2', supplier: 'Supplier B', type: 'Grower Feed', quantity: '300 kg', cost: 'Rs.15000', date: '2024-01-05', expireDate: '2024-06-05' },
-      // Add more feeds if needed
     ],
   },
   {
     name: 'Block C',
     feeds: [
       { id: '3', supplier: 'Supplier C', type: 'Finisher Feed', quantity: '200 kg', cost: 'Rs.10000', date: '2024-01-10', expireDate: '2024-06-10' },
-      // Add more feeds if needed
     ],
   },
 ];
 
 const FeedInventoryScreen = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
 
   return (
       <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -40,27 +39,27 @@ const FeedInventoryScreen = () => {
                   <View key={feed.id} style={styles.feedDetails}>
                     <View style={styles.detailRow}>
                       <Icon name="food-apple" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Type: {feed.type}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('type')}: {feed.type}</Text>
                     </View>
                     <View style={styles.detailRow}>
                       <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {feed.supplier}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {feed.supplier}</Text>
                     </View>
                     <View style={styles.detailRow}>
                       <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {feed.quantity}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {feed.quantity}</Text>
                     </View>
                     <View style={styles.detailRow}>
                       <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Cost: {feed.cost}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {feed.cost}</Text>
                     </View>
                     <View style={styles.detailRow}>
                       <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {feed.date}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {feed.date}</Text>
                     </View>
                     <View style={styles.detailRow}>
                       <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                      <Text style={[styles.detailText, { color: theme.text }]}>Expire Date: {feed.expireDate}</Text>
+                      <Text style={[styles.detailText, { color: theme.text }]}>{t('expire_date')}: {feed.expireDate}</Text>
                     </View>
                   </View>
               ))}

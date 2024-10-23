@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../../theme/ThemeContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
+import { useTranslation } from 'react-i18next';
 
 const initialChicks = [
     { id: '1', block: 'Block A', supplier: 'Supplier A', breed: 'Breed X', quantity: 150, cost: '3000', purchaseDate: '2024-01-01' },
@@ -14,6 +14,7 @@ const initialChicks = [
 
 const ChickInventoryScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
     const [chicks, setChicks] = useState(initialChicks);
     const [modalVisible, setModalVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
@@ -38,18 +39,18 @@ const ChickInventoryScreen = () => {
     };
 
     const confirmDelete = () => {
-        if (password === 'm') {
+        if (password === 'farm') {
             setChicks((prevChicks) => prevChicks.filter((chick) => chick.id !== selectedChickId));
             setPasswordModalVisible(false);
             setPassword('');
         } else {
-            Alert.alert('Error', 'Incorrect password. Please try again.');
+            Alert.alert(t('error'), t('incorrect_password'));
         }
     };
 
     const handleAddChick = () => {
         if (!newChick.block || !newChick.supplier || !newChick.breed || !newChick.quantity || !newChick.cost || !newChick.purchaseDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
@@ -70,7 +71,7 @@ const ChickInventoryScreen = () => {
 
     const handleEditChick = () => {
         if (!editChick.supplier || !editChick.breed || !editChick.quantity || !editChick.cost || !editChick.purchaseDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
@@ -104,27 +105,27 @@ const ChickInventoryScreen = () => {
                         <View style={styles.chickDetails}>
                             <View style={styles.detailRow}>
                                 <Icon name="bird" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Breed: {chick.breed}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('breed')}: {chick.breed}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {chick.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {chick.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {chick.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {chick.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Cost: {chick.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {chick.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {chick.purchaseDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {chick.purchaseDate}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Age: {calculateAgeInDays(chick.purchaseDate)} days</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('age')}: {calculateAgeInDays(chick.purchaseDate)} {t('days')}</Text>
                             </View>
                             <View style={styles.actionButtons}>
                                 <TouchableOpacity onPress={() => handleOpenEditModal(chick)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
@@ -142,13 +143,15 @@ const ChickInventoryScreen = () => {
             <TouchableOpacity style={[styles.floatingButton, { backgroundColor: theme.primary }]} onPress={() => { setModalVisible(true); setDatePickerFor('new'); }}>
                 <MaterialIcons name="add" size={30} color="#fff" />
             </TouchableOpacity>
+
+            {/* Add Chick Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Add New Chick</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_new_chick')}</Text>
 
                         <TextInput
-                            placeholder="Block"
+                            placeholder={t('block')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newChick.block}
@@ -156,7 +159,7 @@ const ChickInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Supplier"
+                            placeholder={t('supplier')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newChick.supplier}
@@ -164,7 +167,7 @@ const ChickInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Breed"
+                            placeholder={t('breed')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newChick.breed}
@@ -172,7 +175,7 @@ const ChickInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Quantity"
+                            placeholder={t('quantity')}
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
@@ -181,19 +184,20 @@ const ChickInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Cost"
+                            placeholder={t('cost')}
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newChick.cost}
                             onChangeText={(text) => setNewChick({ ...newChick, cost: text })}
                         />
-                        <View>
-                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
 
-                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
+                        <View>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
+
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('new'); }}>
                                 <TextInput
-                                    placeholder="Purchase Date (YYYY-MM-DD)"
+                                    placeholder={t('purchase_date')}
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
                                     value={newChick.purchaseDate}
@@ -213,34 +217,72 @@ const ChickInventoryScreen = () => {
 
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleAddChick}>
-                                <Text style={styles.buttonText}>Add</Text>
+                                <Text style={styles.buttonText}>{t('add')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
 
+            {/* Edit Chick Modal */}
             <Modal visible={editModalVisible} animationType="slide" transparent={true} onRequestClose={() => setEditModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Edit Chick</Text>
-                        <TextInput placeholder="Block" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.block} editable={false} />
-                        <TextInput placeholder="Supplier" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.supplier} onChangeText={(text) => setEditChick({ ...editChick, supplier: text })} />
-                        <TextInput placeholder="Breed" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.breed} onChangeText={(text) => setEditChick({ ...editChick, breed: text })} />
-                        <TextInput placeholder="Quantity" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.quantity.toString()} onChangeText={(text) => setEditChick({ ...editChick, quantity: text })} />
-                        <TextInput placeholder="Cost" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editChick.cost} onChangeText={(text) => setEditChick({ ...editChick, cost: text })} />
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('edit_chick')}</Text>
 
-                        <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
+                        <TextInput
+                            placeholder={t('block')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editChick.block}
+                            editable={false}
+                        />
 
-                        <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
+                        <TextInput
+                            placeholder={t('supplier')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editChick.supplier}
+                            onChangeText={(text) => setEditChick({ ...editChick, supplier: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('breed')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editChick.breed}
+                            onChangeText={(text) => setEditChick({ ...editChick, breed: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('quantity')}
+                            keyboardType="numeric"
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editChick.quantity.toString()}
+                            onChangeText={(text) => setEditChick({ ...editChick, quantity: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('cost')}
+                            keyboardType="numeric"
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editChick.cost}
+                            onChangeText={(text) => setEditChick({ ...editChick, cost: text })}
+                        />
+
+                        <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
+
+                        <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('edit'); }}>
                             <TextInput
-                                placeholder="Purchase Date (YYYY-MM-DD)"
+                                placeholder={t('purchase_date')}
                                 style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                 placeholderTextColor={theme.placeholder}
-                                value={newChick.purchaseDate}
+                                value={editChick.purchaseDate}
                                 editable={false}
                             />
                         </TouchableOpacity>
@@ -253,35 +295,40 @@ const ChickInventoryScreen = () => {
                                 onChange={handleDateChange}
                             />
                         )}
+
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setEditModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleEditChick}>
-                                <Text style={styles.buttonText}>Save</Text>
+                                <Text style={styles.buttonText}>{t('save')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
+
+            {/* Password Modal */}
             <Modal visible={passwordModalVisible} animationType="slide" transparent={true} onRequestClose={() => setPasswordModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Enter Password</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('enter_password')}</Text>
+
                         <TextInput
-                            placeholder="Password"
+                            placeholder={t('password')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry
                         />
+
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setPasswordModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={confirmDelete}>
-                                <Text style={styles.buttonText}>Confirm</Text>
+                                <Text style={styles.buttonText}>{t('confirm')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

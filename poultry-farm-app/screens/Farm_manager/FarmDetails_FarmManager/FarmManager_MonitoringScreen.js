@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const monitoringData = [
     { id: '1', name: 'Block A', temperature: 24, ammoniaLevel: 20 },
@@ -13,6 +14,7 @@ const getPercentage = (value, max) => (value / max) * 100;
 
 const MonitoringScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -22,7 +24,9 @@ const MonitoringScreen = () => {
 
                     <View style={styles.detailRow}>
                         <Icon name="thermometer" size={20} color={theme.iconColor} style={styles.icon} />
-                        <Text style={[styles.detailText, { color: theme.text }]}>Temperature: {block.temperature}°C</Text>
+                        <Text style={[styles.detailText, { color: theme.text }]}>
+                            {t('temperature')}: {block.temperature}°C
+                        </Text>
                     </View>
                     <View style={styles.progressBarContainer}>
                         <View style={[styles.progressBar, { width: `${getPercentage(block.temperature, 40)}%`, backgroundColor: 'coral' }]} />
@@ -30,7 +34,9 @@ const MonitoringScreen = () => {
 
                     <View style={styles.detailRow}>
                         <Icon name="chemical-weapon" size={20} color={theme.iconColor} style={styles.icon} />
-                        <Text style={[styles.detailText, { color: theme.text }]}>Ammonia Level: {block.ammoniaLevel} ppm</Text>
+                        <Text style={[styles.detailText, { color: theme.text }]}>
+                            {t('ammonia_level')}: {block.ammoniaLevel} ppm
+                        </Text>
                     </View>
                     <View style={styles.progressBarContainer}>
                         <View style={[styles.progressBar, { width: `${getPercentage(block.ammoniaLevel, 50)}%`, backgroundColor: 'darkorange' }]} />

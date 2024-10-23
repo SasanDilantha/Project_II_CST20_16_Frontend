@@ -36,7 +36,7 @@ const darkTheme = {
 export const ThemeProvider = ({ children }) => {
   const colorScheme = Appearance.getColorScheme();
   const defaultTheme = colorScheme === 'dark' ? darkTheme : lightTheme;
-  
+
   const [theme, setTheme] = useState(defaultTheme);
 
   const toggleTheme = () => {

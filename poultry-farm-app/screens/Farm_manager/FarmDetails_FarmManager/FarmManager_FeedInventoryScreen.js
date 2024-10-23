@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../../theme/ThemeContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTranslation } from 'react-i18next';
 
 const initialFeeds = [
     { id: '1', block: 'Block A', supplier: 'Supplier A', type: 'Starter Feed', quantity: '500 kg', cost: '20000', date: '2024-01-01', expireDate: '2024-06-01' },
@@ -13,6 +14,7 @@ const initialFeeds = [
 
 const FeedInventoryScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
     const [feeds, setFeeds] = useState(initialFeeds);
     const [modalVisible, setModalVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
@@ -35,18 +37,18 @@ const FeedInventoryScreen = () => {
             setPasswordModalVisible(false);
             setPassword('');
         } else {
-            Alert.alert('Error', 'Incorrect password. Please try again.');
+            Alert.alert(t('error'), t('incorrect_password'));
         }
     };
 
     const handleAddFeed = () => {
         if (!newFeed.block || !newFeed.supplier || !newFeed.type || !newFeed.quantity || !newFeed.cost || !newFeed.date || !newFeed.expireDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
         if (isNaN(newFeed.cost) || isNaN(newFeed.quantity.replace(' kg', ''))) {
-            Alert.alert('Error', 'Cost and Quantity should be numeric values.');
+            Alert.alert(t('error'), t('cost_quantity_numeric'));
             return;
         }
 
@@ -68,12 +70,12 @@ const FeedInventoryScreen = () => {
 
     const handleEditFeed = () => {
         if (!editFeed.supplier || !editFeed.type || !editFeed.quantity || !editFeed.cost || !editFeed.date || !editFeed.expireDate) {
-            Alert.alert('Error', 'Please fill all the fields.');
+            Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
         if (isNaN(editFeed.cost) || isNaN(editFeed.quantity.replace(' kg', ''))) {
-            Alert.alert('Error', 'Cost and Quantity should be numeric values.');
+            Alert.alert(t('error'), t('cost_quantity_numeric'));
             return;
         }
 
@@ -111,27 +113,27 @@ const FeedInventoryScreen = () => {
                         <View style={styles.feedDetails}>
                             <View style={styles.detailRow}>
                                 <Icon name="food-apple" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Type: {feed.type}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('type')}: {feed.type}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {feed.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {feed.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {feed.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {feed.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Cost: {feed.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {feed.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {feed.date}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {feed.date}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Expire Date: {feed.expireDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('expire_date')}: {feed.expireDate}</Text>
                             </View>
                             <View style={styles.actionButtons}>
                                 <TouchableOpacity onPress={() => handleOpenEditModal(feed)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
@@ -149,13 +151,15 @@ const FeedInventoryScreen = () => {
             <TouchableOpacity style={[styles.floatingButton, { backgroundColor: theme.primary }]} onPress={() => { setModalVisible(true); setDatePickerFor('newDate'); }}>
                 <MaterialIcons name="add" size={30} color="#fff" />
             </TouchableOpacity>
+
+            {/* Add Feed Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Add New Feed</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_new_feed')}</Text>
 
                         <TextInput
-                            placeholder="Block"
+                            placeholder={t('block')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newFeed.block}
@@ -163,7 +167,7 @@ const FeedInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Supplier"
+                            placeholder={t('supplier')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newFeed.supplier}
@@ -171,7 +175,7 @@ const FeedInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Type"
+                            placeholder={t('type')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={newFeed.type}
@@ -179,7 +183,7 @@ const FeedInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Quantity (kg)"
+                            placeholder={t('quantity')}
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
@@ -188,7 +192,7 @@ const FeedInventoryScreen = () => {
                         />
 
                         <TextInput
-                            placeholder="Cost"
+                            placeholder={t('cost')}
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
@@ -197,7 +201,7 @@ const FeedInventoryScreen = () => {
                         />
 
                         <View>
-                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
@@ -208,7 +212,7 @@ const FeedInventoryScreen = () => {
                                 />
                             </TouchableOpacity>
 
-                            <Text style={[styles.label, { color: theme.text }]}>Expire Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newExpireDate'); }}>
                                 <TextInput
                                     placeholder="YYYY-MM-DD"
@@ -231,30 +235,69 @@ const FeedInventoryScreen = () => {
 
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleAddFeed}>
-                                <Text style={styles.buttonText}>Add</Text>
+                                <Text style={styles.buttonText}>{t('add')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
 
+            {/* Edit Feed Modal */}
             <Modal visible={editModalVisible} animationType="slide" transparent={true} onRequestClose={() => setEditModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Edit Feed</Text>
-                        <TextInput placeholder="Block" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editFeed.block} editable={false} />
-                        <TextInput placeholder="Supplier" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editFeed.supplier} onChangeText={(text) => setEditFeed({ ...editFeed, supplier: text })} />
-                        <TextInput placeholder="Type" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editFeed.type} onChangeText={(text) => setEditFeed({ ...editFeed, type: text })} />
-                        <TextInput placeholder="Quantity (kg)" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editFeed.quantity} onChangeText={(text) => setEditFeed({ ...editFeed, quantity: text })} />
-                        <TextInput placeholder="Cost" keyboardType="numeric" style={[styles.input, { color: theme.text, borderColor: theme.primary }]} placeholderTextColor={theme.placeholder} value={editFeed.cost} onChangeText={(text) => setEditFeed({ ...editFeed, cost: text })} />
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('edit_feed')}</Text>
+
+                        <TextInput
+                            placeholder={t('block')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editFeed.block}
+                            editable={false}
+                        />
+
+                        <TextInput
+                            placeholder={t('supplier')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editFeed.supplier}
+                            onChangeText={(text) => setEditFeed({ ...editFeed, supplier: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('type')}
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editFeed.type}
+                            onChangeText={(text) => setEditFeed({ ...editFeed, type: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('quantity')}
+                            keyboardType="numeric"
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editFeed.quantity}
+                            onChangeText={(text) => setEditFeed({ ...editFeed, quantity: text })}
+                        />
+
+                        <TextInput
+                            placeholder={t('cost')}
+                            keyboardType="numeric"
+                            style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                            placeholderTextColor={theme.placeholder}
+                            value={editFeed.cost}
+                            onChangeText={(text) => setEditFeed({ ...editFeed, cost: text })}
+                        />
+
                         <View>
-                            <Text style={[styles.label, { color: theme.text }]}>Purchase Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
                                 <TextInput
-                                    placeholder="YYYY-MM-DD"
+                                    placeholder={t('purchase_date')}
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
                                     value={editFeed.date}
@@ -262,10 +305,10 @@ const FeedInventoryScreen = () => {
                                 />
                             </TouchableOpacity>
 
-                            <Text style={[styles.label, { color: theme.text }]}>Expire Date</Text>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
                             <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editExpireDate'); }}>
                                 <TextInput
-                                    placeholder="YYYY-MM-DD"
+                                    placeholder={t('expire_date')}
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
                                     value={editFeed.expireDate}
@@ -283,33 +326,37 @@ const FeedInventoryScreen = () => {
                         )}
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setEditModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleEditFeed}>
-                                <Text style={styles.buttonText}>Save</Text>
+                                <Text style={styles.buttonText}>{t('save')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </Modal>
+
+            {/* Password Modal */}
             <Modal visible={passwordModalVisible} animationType="slide" transparent={true} onRequestClose={() => setPasswordModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>Enter Password</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('enter_password')}</Text>
+
                         <TextInput
-                            placeholder="Password"
+                            placeholder={t('password')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry
                         />
+
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setPasswordModalVisible(false)}>
-                                <Text style={styles.buttonText}>Cancel</Text>
+                                <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={confirmDelete}>
-                                <Text style={styles.buttonText}>Confirm</Text>
+                                <Text style={styles.buttonText}>{t('confirm')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
