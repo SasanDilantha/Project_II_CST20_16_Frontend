@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FarmDetailsScreen from './Admin_FarmDetailsScreen';
 import FinanceScreen from './Admin_FinanceScreen';
 import ReportScreen from './Admin_ReportScreen';
 import UserManagementScreen from './Admin_UserManagementScreen';
 import NotificationScreen from './Admin_NotificationScreen';
-import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Switch, Image, Alert, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Animated, Dimensions, Modal, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
@@ -93,15 +94,19 @@ const SidePanel = ({ visible, onClose, navigation }) => {
                   <Text style={[styles.profileText, { color: theme.text }]}>John Doe</Text>
                   <Text style={[styles.profileText, { color: theme.text }]}>john.doe@example.com</Text>
                 </View>
+
+                {/* Theme Toggle with Sun and Moon Icons */}
                 <View style={styles.themeToggleContainer}>
                   <Text style={[styles.sidePanelTitle, { color: theme.text }]}>{t('switch_theme')}</Text>
-                  <Switch
-                      trackColor={{ false: "#767577", true: theme.primary }}
-                      thumbColor={isEnabled ? theme.primary : "#f4f3f4"}
-                      onValueChange={toggleSwitch}
-                      value={isEnabled}
-                  />
+                  <TouchableOpacity onPress={toggleSwitch} style={styles.iconButton}>
+                    <MaterialCommunityIcons
+                        name={isEnabled ? "weather-night" : "weather-sunny"}
+                        size={30}
+                        color={isEnabled ? "#FFD700" : "#FFA500"}
+                    />
+                  </TouchableOpacity>
                 </View>
+
                 <TouchableOpacity onPress={handleViewRecords} style={[styles.recordsButton, { backgroundColor: theme.primary }]}>
                   <Text style={[styles.recordsButtonText, { color: theme.text }]}>{t('view_past_records')}</Text>
                 </TouchableOpacity>
@@ -278,6 +283,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
+  },
+  iconButton: {
+    padding: 5,
   },
   recordsButton: {
     padding: 10,

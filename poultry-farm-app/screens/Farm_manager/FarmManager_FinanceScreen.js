@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Importing useTranslation hook
 
 const FarmManager_FinanceScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation(); // Initialize the translation hook
 
     const [transactions, setTransactions] = useState([
         { id: '1', amount: '800', description: 'Chicken sales', type: 'income', date: '2024-06-01', farm: 'Happy Farm' },
@@ -36,7 +38,7 @@ const FarmManager_FinanceScreen = () => {
             setAmount('');
             setDescription('');
         } else {
-            alert('Please fill out all fields');
+            alert(t('fill_all_fields')); // Use translation for alert message
         }
     };
 
@@ -51,13 +53,13 @@ const FarmManager_FinanceScreen = () => {
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={[styles.summaryCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
-                <Text style={[styles.summaryTitle, { color: theme.primary }]}>Farm: {farmName}</Text>
+                <Text style={[styles.summaryTitle, { color: theme.primary }]}>{t('farm')}: {farmName}</Text>
                 <View style={styles.summaryContent}>
-                    <Text style={[styles.summaryText, { color: theme.primary }]}>Total Income: </Text>
+                    <Text style={[styles.summaryText, { color: theme.primary }]}>{t('total_income')}: </Text>
                     <Text style={[styles.summaryAmount, { color: 'green' }]}>Rs.{totalIncome}</Text>
                 </View>
                 <View style={styles.summaryContent}>
-                    <Text style={[styles.summaryText, { color: theme.primary }]}>Total Expenses: </Text>
+                    <Text style={[styles.summaryText, { color: theme.primary }]}>{t('total_expenses')}: </Text>
                     <Text style={[styles.summaryAmount, { color: 'red' }]}>Rs.{totalExpenses}</Text>
                 </View>
             </View>
@@ -67,19 +69,19 @@ const FarmManager_FinanceScreen = () => {
                     style={[styles.filterButton, filterType === 'all' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
                     onPress={() => setFilterType('all')}
                 >
-                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>All</Text>
+                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('all')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.filterButton, filterType === 'income' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
                     onPress={() => setFilterType('income')}
                 >
-                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>Income</Text>
+                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('income')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.filterButton, filterType === 'expense' ? { backgroundColor: theme.primary } : { backgroundColor: theme.buttonBackground }]}
                     onPress={() => setFilterType('expense')}
                 >
-                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>Expense</Text>
+                    <Text style={[styles.buttonText, { color: theme.buttonText }]}>{t('expense')}</Text>
                 </TouchableOpacity>
             </View>
 

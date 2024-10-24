@@ -99,5 +99,17 @@
   "drug": "Drug",
   "temperature": "Temperature",
   "ammonia_level": "Ammonia Level",
-  "farm_manager_details": "Farm manager details"
+  "farm_manager_details": "Farm manager details",
+  "user_management_for": "User Management For",
+  "call": "call",
+  "choose_farm_report": "Please choose a farm to view its report",
+  "select_farm": "Select a farm",
+  "chick_details": "Chick Details",
+  "total_chicks": "Total Chicks",
+  "healthy_chicks": "Healthy Chicks",
+  "sick_chicks": "Sick Chicks",
+  "health_report": "Health Report",
+  "vaccinated": "Vaccinated",
+  "not_vaccinated": "Not Vaccinated",
+  "diseases": "Diseases"
 }

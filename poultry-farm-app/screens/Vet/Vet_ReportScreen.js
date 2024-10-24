@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Vet_ReportScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation(); // Initialize translation hook
     const [selectedFarm, setSelectedFarm] = useState(null);
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -63,26 +65,26 @@ const Vet_ReportScreen = () => {
     const renderFarmDetail = ({ item }) => (
         <View style={[styles.sectionContainer, { backgroundColor: theme.cardBackground }]}>
             <TouchableOpacity onPress={() => toggleSection('chickDetails')} style={styles.sectionHeader}>
-                <Text style={[styles.title, { color: theme.primary }]}>Chick Details</Text>
+                <Text style={[styles.title, { color: theme.primary }]}>{t('chick_details')}</Text>
                 <Icon name={collapsedSections.chickDetails ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
             </TouchableOpacity>
             <Collapsible collapsed={collapsedSections.chickDetails}>
                 <View style={styles.sectionContent}>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Total Chicks: {item.chickDetails.totalChicks}</Text>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Healthy Chicks: {item.chickDetails.healthyChicks}</Text>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Sick Chicks: {item.chickDetails.sickChicks}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('total_chicks')}: {item.chickDetails.totalChicks}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('healthy_chicks')}: {item.chickDetails.healthyChicks}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('sick_chicks')}: {item.chickDetails.sickChicks}</Text>
                 </View>
             </Collapsible>
 
             <TouchableOpacity onPress={() => toggleSection('healthReport')} style={styles.sectionHeader}>
-                <Text style={[styles.title, { color: theme.primary }]}>Health Report</Text>
+                <Text style={[styles.title, { color: theme.primary }]}>{t('health_report')}</Text>
                 <Icon name={collapsedSections.healthReport ? 'chevron-down' : 'chevron-up'} size={24} color={theme.primary} />
             </TouchableOpacity>
             <Collapsible collapsed={collapsedSections.healthReport}>
                 <View style={styles.sectionContent}>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Vaccinated: {item.healthReport.vaccinated}</Text>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Not Vaccinated: {item.healthReport.notVaccinated}</Text>
-                    <Text style={[styles.detailText, { color: theme.text }]}>Diseases: {item.healthReport.diseases}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('vaccinated')}: {item.healthReport.vaccinated}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('not_vaccinated')}: {item.healthReport.notVaccinated}</Text>
+                    <Text style={[styles.detailText, { color: theme.text }]}>{t('diseases')}: {item.healthReport.diseases}</Text>
                 </View>
             </Collapsible>
         </View>
@@ -90,7 +92,7 @@ const Vet_ReportScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>
-            <Text style={[styles.message, { color: theme.text }]}>Please choose a farm to view its report:</Text>
+            <Text style={[styles.message, { color: theme.text }]}>{t('choose_farm_report')}</Text>
             <DropDownPicker
                 open={open}
                 value={value}
@@ -98,7 +100,7 @@ const Vet_ReportScreen = () => {
                 setOpen={setOpen}
                 setValue={setValue}
                 setItems={setItems}
-                placeholder="Select a farm"
+                placeholder={t('select_farm')}
                 onChangeValue={(itemValue) => {
                     setSelectedFarm(itemValue);
                 }}

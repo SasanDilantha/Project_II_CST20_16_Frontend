@@ -6,41 +6,34 @@ import { useTheme } from '../../../theme/ThemeContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTranslation } from 'react-i18next';
 
-const initialChicks = [
-    { id: '1', block: 'Block A', supplier: 'Supplier A', breed: 'Breed X', quantity: 150, cost: '3000', purchaseDate: '2024-01-01' },
-    { id: '2', block: 'Block B', supplier: 'Supplier B', breed: 'Breed Y', quantity: 200, cost: '5000', purchaseDate: '2024-01-05' },
-    { id: '3', block: 'Block C', supplier: 'Supplier A', breed: 'Breed Z', quantity: 250, cost: '5000', purchaseDate: '2024-01-10' },
+const initialMedicals = [
+    { id: '1', block: 'Block A', supplier: 'Supplier A', drug: 'Vaccine A', quantity: '50 doses', cost: '1000', date: '2024-01-01', expireDate: '2024-06-01' },
+    { id: '2', block: 'Block B', supplier: 'Supplier B', drug: 'Antibiotic B', quantity: '100 doses', cost: '2000', date: '2024-01-05', expireDate: '2024-06-05' },
+    { id: '3', block: 'Block C', supplier: 'Supplier C', drug: 'Vitamin C', quantity: '200 doses', cost: '1500', date: '2024-01-10', expireDate: '2024-06-10' },
 ];
 
-const ChickInventoryScreen = () => {
+const MedicalInventoryScreen = () => {
     const { theme } = useTheme();
     const { t } = useTranslation();
-    const [chicks, setChicks] = useState(initialChicks);
+    const [medicals, setMedicals] = useState(initialMedicals);
     const [modalVisible, setModalVisible] = useState(false);
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [password, setPassword] = useState('');
-    const [selectedChickId, setSelectedChickId] = useState('');
-    const [newChick, setNewChick] = useState({ block: '', supplier: '', breed: '', quantity: '', cost: '', purchaseDate: new Date().toISOString().split('T')[0] });
-    const [editChick, setEditChick] = useState({ id: '', block: '', supplier: '', breed: '', quantity: '', cost: '', purchaseDate: '' });
+    const [selectedMedicalId, setSelectedMedicalId] = useState('');
+    const [newMedical, setNewMedical] = useState({ block: '', supplier: '', drug: '', quantity: '', cost: '', date: new Date().toISOString().split('T')[0], expireDate: new Date().toISOString().split('T')[0] });
+    const [editMedical, setEditMedical] = useState({ id: '', block: '', supplier: '', drug: '', quantity: '', cost: '', date: '', expireDate: '' });
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [datePickerFor, setDatePickerFor] = useState('');
 
-    const calculateAgeInDays = (purchaseDate) => {
-        const currentDate = new Date();
-        const purchaseDateObj = new Date(purchaseDate);
-        const differenceInTime = currentDate.getTime() - purchaseDateObj.getTime();
-        return Math.floor(differenceInTime / (1000 * 3600 * 24));
-    };
-
-    const handleDelete = (chickId) => {
-        setSelectedChickId(chickId);
+    const handleDelete = (medicalId) => {
+        setSelectedMedicalId(medicalId);
         setPasswordModalVisible(true);
     };
 
     const confirmDelete = () => {
-        if (password === 'farm') {
-            setChicks((prevChicks) => prevChicks.filter((chick) => chick.id !== selectedChickId));
+        if (password === 'm') {
+            setMedicals((prevMedicals) => prevMedicals.filter((medical) => medical.id !== selectedMedicalId));
             setPasswordModalVisible(false);
             setPassword('');
         } else {
@@ -48,40 +41,41 @@ const ChickInventoryScreen = () => {
         }
     };
 
-    const handleAddChick = () => {
-        if (!newChick.block || !newChick.supplier || !newChick.breed || !newChick.quantity || !newChick.cost || !newChick.purchaseDate) {
+    const handleAddMedical = () => {
+        if (!newMedical.block || !newMedical.supplier || !newMedical.drug || !newMedical.quantity || !newMedical.cost || !newMedical.date || !newMedical.expireDate) {
             Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
-        const newChickData = {
+        const newMedicalData = {
             id: `${Date.now()}`,
-            block: newChick.block,
-            supplier: newChick.supplier,
-            breed: newChick.breed,
-            quantity: parseInt(newChick.quantity),
-            cost: newChick.cost,
-            purchaseDate: newChick.purchaseDate,
+            block: newMedical.block,
+            supplier: newMedical.supplier,
+            drug: newMedical.drug,
+            quantity: newMedical.quantity,
+            cost: newMedical.cost,
+            date: newMedical.date,
+            expireDate: newMedical.expireDate,
         };
 
-        setChicks((prevChicks) => [...prevChicks, newChickData]);
+        setMedicals((prevMedicals) => [...prevMedicals, newMedicalData]);
         setModalVisible(false);
-        setNewChick({ block: '', supplier: '', breed: '', quantity: '', cost: '', purchaseDate: new Date().toISOString().split('T')[0] });
+        setNewMedical({ block: '', supplier: '', drug: '', quantity: '', cost: '', date: new Date().toISOString().split('T')[0], expireDate: new Date().toISOString().split('T')[0] });
     };
 
-    const handleEditChick = () => {
-        if (!editChick.supplier || !editChick.breed || !editChick.quantity || !editChick.cost || !editChick.purchaseDate) {
+    const handleEditMedical = () => {
+        if (!editMedical.supplier || !editMedical.drug || !editMedical.quantity || !editMedical.cost || !editMedical.date || !editMedical.expireDate) {
             Alert.alert(t('error'), t('fill_all_fields'));
             return;
         }
 
-        setChicks((prevChicks) => prevChicks.map((chick) => chick.id === editChick.id ? editChick : chick));
+        setMedicals((prevMedicals) => prevMedicals.map((medical) => medical.id === editMedical.id ? editMedical : medical));
         setEditModalVisible(false);
-        setEditChick({ id: '', block: '', supplier: '', breed: '', quantity: '', cost: '', purchaseDate: '' });
+        setEditMedical({ id: '', block: '', supplier: '', drug: '', quantity: '', cost: '', date: '', expireDate: '' });
     };
 
-    const handleOpenEditModal = (chick) => {
-        setEditChick(chick);
+    const handleOpenEditModal = (medical) => {
+        setEditMedical(medical);
         setEditModalVisible(true);
     };
 
@@ -89,50 +83,54 @@ const ChickInventoryScreen = () => {
         const currentDate = selectedDate || new Date();
         setShowDatePicker(false);
 
-        if (datePickerFor === 'new') {
-            setNewChick({ ...newChick, purchaseDate: currentDate.toISOString().split('T')[0] });
-        } else {
-            setEditChick({ ...editChick, purchaseDate: currentDate.toISOString().split('T')[0] });
+        if (datePickerFor === 'newDate') {
+            setNewMedical({ ...newMedical, date: currentDate.toISOString().split('T')[0] });
+        } else if (datePickerFor === 'newExpireDate') {
+            setNewMedical({ ...newMedical, expireDate: currentDate.toISOString().split('T')[0] });
+        } else if (datePickerFor === 'editDate') {
+            setEditMedical({ ...editMedical, date: currentDate.toISOString().split('T')[0] });
+        } else if (datePickerFor === 'editExpireDate') {
+            setEditMedical({ ...editMedical, expireDate: currentDate.toISOString().split('T')[0] });
         }
     };
 
     return (
         <View style={{ flex: 1 }}>
             <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
-                {chicks.map((chick) => (
-                    <View key={chick.id} style={[styles.blockCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
-                        <Text style={[styles.blockTitle, { color: theme.primary }]}>{chick.block}</Text>
-                        <View style={styles.chickDetails}>
+                {medicals.map((medical) => (
+                    <View key={medical.id} style={[styles.blockCard, { backgroundColor: theme.cardBackground, shadowColor: theme.shadowColor }]}>
+                        <Text style={[styles.blockTitle, { color: theme.primary }]}>{medical.block}</Text>
+                        <View style={styles.medicalDetails}>
                             <View style={styles.detailRow}>
-                                <Icon name="bird" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('breed')}: {chick.breed}</Text>
+                                <Icon name="pill" size={20} color={theme.iconColor} style={styles.icon} />
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('drug')}: {medical.drug}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {chick.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {medical.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {chick.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {medical.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {chick.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {medical.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {chick.purchaseDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {medical.date}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>{t('age')}: {calculateAgeInDays(chick.purchaseDate)} {t('days')}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('expire_date')}: {medical.expireDate}</Text>
                             </View>
                             <View style={styles.actionButtons}>
-                                <TouchableOpacity onPress={() => handleOpenEditModal(chick)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
+                                <TouchableOpacity onPress={() => handleOpenEditModal(medical)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
                                     <MaterialIcons name="edit" size={20} color="#fff" />
                                 </TouchableOpacity>
                                 <View style={styles.buttonSpacing} />
-                                <TouchableOpacity onPress={() => handleDelete(chick.id)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
+                                <TouchableOpacity onPress={() => handleDelete(medical.id)} style={[styles.actionButton, { backgroundColor: theme.primary }]}>
                                     <MaterialIcons name="delete" size={20} color="#fff" />
                                 </TouchableOpacity>
                             </View>
@@ -140,47 +138,46 @@ const ChickInventoryScreen = () => {
                     </View>
                 ))}
             </ScrollView>
-            <TouchableOpacity style={[styles.floatingButton, { backgroundColor: theme.primary }]} onPress={() => { setModalVisible(true); setDatePickerFor('new'); }}>
+            <TouchableOpacity style={[styles.floatingButton, { backgroundColor: theme.primary }]} onPress={() => { setModalVisible(true); setDatePickerFor('newDate'); }}>
                 <MaterialIcons name="add" size={30} color="#fff" />
             </TouchableOpacity>
 
-            {/* Add Chick Modal */}
+            {/* Add Medical Modal */}
             <Modal visible={modalVisible} animationType="slide" transparent={true} onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_new_chick')}</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('add_new_medical')}</Text>
 
                         <TextInput
                             placeholder={t('block')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={newChick.block}
-                            onChangeText={(text) => setNewChick({ ...newChick, block: text })}
+                            value={newMedical.block}
+                            onChangeText={(text) => setNewMedical({ ...newMedical, block: text })}
                         />
 
                         <TextInput
                             placeholder={t('supplier')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={newChick.supplier}
-                            onChangeText={(text) => setNewChick({ ...newChick, supplier: text })}
+                            value={newMedical.supplier}
+                            onChangeText={(text) => setNewMedical({ ...newMedical, supplier: text })}
                         />
 
                         <TextInput
-                            placeholder={t('breed')}
+                            placeholder={t('drug')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={newChick.breed}
-                            onChangeText={(text) => setNewChick({ ...newChick, breed: text })}
+                            value={newMedical.drug}
+                            onChangeText={(text) => setNewMedical({ ...newMedical, drug: text })}
                         />
 
                         <TextInput
                             placeholder={t('quantity')}
-                            keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={newChick.quantity}
-                            onChangeText={(text) => setNewChick({ ...newChick, quantity: text })}
+                            value={newMedical.quantity}
+                            onChangeText={(text) => setNewMedical({ ...newMedical, quantity: text })}
                         />
 
                         <TextInput
@@ -188,27 +185,36 @@ const ChickInventoryScreen = () => {
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={newChick.cost}
-                            onChangeText={(text) => setNewChick({ ...newChick, cost: text })}
+                            value={newMedical.cost}
+                            onChangeText={(text) => setNewMedical({ ...newMedical, cost: text })}
                         />
 
                         <View>
                             <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
-
-                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('new'); }}>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newDate'); }}>
                                 <TextInput
-                                    placeholder={t('purchase_date')}
+                                    placeholder="YYYY-MM-DD"
                                     style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                                     placeholderTextColor={theme.placeholder}
-                                    value={newChick.purchaseDate}
+                                    value={newMedical.date}
+                                    editable={false}
+                                />
+                            </TouchableOpacity>
+
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('newExpireDate'); }}>
+                                <TextInput
+                                    placeholder="YYYY-MM-DD"
+                                    style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                                    placeholderTextColor={theme.placeholder}
+                                    value={newMedical.expireDate}
                                     editable={false}
                                 />
                             </TouchableOpacity>
                         </View>
-
                         {showDatePicker && (
                             <DateTimePicker
-                                value={new Date(newChick.purchaseDate)}
+                                value={new Date(datePickerFor.includes('Expire') ? newMedical.expireDate : newMedical.date)}
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
@@ -219,7 +225,7 @@ const ChickInventoryScreen = () => {
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
                                 <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleAddChick}>
+                            <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleAddMedical}>
                                 <Text style={styles.buttonText}>{t('add')}</Text>
                             </TouchableOpacity>
                         </View>
@@ -227,17 +233,17 @@ const ChickInventoryScreen = () => {
                 </View>
             </Modal>
 
-            {/* Edit Chick Modal */}
+            {/* Edit Medical Modal */}
             <Modal visible={editModalVisible} animationType="slide" transparent={true} onRequestClose={() => setEditModalVisible(false)}>
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalView, { backgroundColor: theme.cardBackground }]}>
-                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('edit_chick')}</Text>
+                        <Text style={[styles.modalTitle, { color: theme.text }]}>{t('edit_medical')}</Text>
 
                         <TextInput
                             placeholder={t('block')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={editChick.block}
+                            value={editMedical.block}
                             editable={false}
                         />
 
@@ -245,25 +251,24 @@ const ChickInventoryScreen = () => {
                             placeholder={t('supplier')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={editChick.supplier}
-                            onChangeText={(text) => setEditChick({ ...editChick, supplier: text })}
+                            value={editMedical.supplier}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, supplier: text })}
                         />
 
                         <TextInput
-                            placeholder={t('breed')}
+                            placeholder={t('drug')}
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={editChick.breed}
-                            onChangeText={(text) => setEditChick({ ...editChick, breed: text })}
+                            value={editMedical.drug}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, drug: text })}
                         />
 
                         <TextInput
                             placeholder={t('quantity')}
-                            keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={editChick.quantity.toString()}
-                            onChangeText={(text) => setEditChick({ ...editChick, quantity: text })}
+                            value={editMedical.quantity}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, quantity: text })}
                         />
 
                         <TextInput
@@ -271,36 +276,46 @@ const ChickInventoryScreen = () => {
                             keyboardType="numeric"
                             style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
                             placeholderTextColor={theme.placeholder}
-                            value={editChick.cost}
-                            onChangeText={(text) => setEditChick({ ...editChick, cost: text })}
+                            value={editMedical.cost}
+                            onChangeText={(text) => setEditMedical({ ...editMedical, cost: text })}
                         />
 
-                        <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
+                        <View>
+                            <Text style={[styles.label, { color: theme.text }]}>{t('purchase_date')}</Text>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editDate'); }}>
+                                <TextInput
+                                    placeholder="YYYY-MM-DD"
+                                    style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                                    placeholderTextColor={theme.placeholder}
+                                    value={editMedical.date}
+                                    editable={false}
+                                />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('edit'); }}>
-                            <TextInput
-                                placeholder={t('purchase_date')}
-                                style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
-                                placeholderTextColor={theme.placeholder}
-                                value={editChick.purchaseDate}
-                                editable={false}
-                            />
-                        </TouchableOpacity>
-
-                        {showDatePicker && datePickerFor === 'edit' && (
+                            <Text style={[styles.label, { color: theme.text }]}>{t('expire_date')}</Text>
+                            <TouchableOpacity onPress={() => { setShowDatePicker(true); setDatePickerFor('editExpireDate'); }}>
+                                <TextInput
+                                    placeholder="YYYY-MM-DD"
+                                    style={[styles.input, { color: theme.text, borderColor: theme.primary }]}
+                                    placeholderTextColor={theme.placeholder}
+                                    value={editMedical.expireDate}
+                                    editable={false}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {showDatePicker && datePickerFor.includes('edit') && (
                             <DateTimePicker
-                                value={new Date(editChick.purchaseDate)}
+                                value={new Date(datePickerFor === 'editExpireDate' ? editMedical.expireDate : editMedical.date)}
                                 mode="date"
                                 display="default"
                                 onChange={handleDateChange}
                             />
                         )}
-
                         <View style={styles.modalButtons}>
                             <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setEditModalVisible(false)}>
                                 <Text style={styles.buttonText}>{t('cancel')}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleEditChick}>
+                            <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={handleEditMedical}>
                                 <Text style={styles.buttonText}>{t('save')}</Text>
                             </TouchableOpacity>
                         </View>
@@ -355,7 +370,7 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         textAlign: 'center',
     },
-    chickDetails: {
+    medicalDetails: {
         marginBottom: 16,
     },
     detailRow: {
@@ -450,4 +465,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChickInventoryScreen;
+export default MedicalInventoryScreen;

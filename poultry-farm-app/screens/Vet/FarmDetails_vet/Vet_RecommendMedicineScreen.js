@@ -1,18 +1,18 @@
-// screens/Vet/FarmDetails_vet/Vet_RecommendMedicineScreen.js
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Alert } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Import the translation hook
 import { ProgressBar } from 'react-native-paper';
 
 const Vet_RecommendMedicineScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation(); // Initialize translation hook
 
     const [note, setNote] = useState('');
     const [notes, setNotes] = useState([
-        { id: '1', blockId: '1', text: 'Note 1 for Block A' },
-        { id: '2', blockId: '2', text: 'Note 2 for Block B' },
+        { id: '1', blockId: '1', text: t('note_example_1') }, // Example note translated
+        { id: '2', blockId: '2', text: t('note_example_2') }, // Example note translated
     ]);
 
     const chickBlocks = [
@@ -36,7 +36,7 @@ const Vet_RecommendMedicineScreen = () => {
 
     const handleAddNote = (blockId) => {
         if (note.trim() === '') {
-            Alert.alert('Error', 'Note cannot be empty');
+            Alert.alert(t('error'), t('note_empty_error')); // Translation for error
             return;
         }
 
@@ -70,25 +70,25 @@ const Vet_RecommendMedicineScreen = () => {
                         <Text style={[styles.blockTitle, { color: theme.text }]}>{item.name}</Text>
                         <View style={styles.chickCountContainer}>
                             <View style={[styles.chickCountBox, { backgroundColor: theme.orange }]}>
-                                <Text style={[styles.chickCountText, { color: theme.text }]}>Total Chicks</Text>
+                                <Text style={[styles.chickCountText, { color: theme.text }]}>{t('total_chicks')}</Text>
                                 <Text style={[styles.chickCountNumber, { color: theme.text }]}>{item.totalChicks}</Text>
                             </View>
                             <View style={[styles.chickCountBox, { backgroundColor: theme.orange }]}>
-                                <Text style={[styles.chickCountText, { color: theme.text }]}>Current Chicks</Text>
+                                <Text style={[styles.chickCountText, { color: theme.text }]}>{t('current_chicks')}</Text>
                                 <Text style={[styles.chickCountNumber, { color: theme.text }]}>{item.healthyChicks}</Text>
                             </View>
                         </View>
 
-                        <Text style={[styles.blockDetail, { color: theme.text }]}>Heat Level: {Math.round(item.heat * 100)}%</Text>
+                        <Text style={[styles.blockDetail, { color: theme.text }]}>{t('heat_level')}: {Math.round(item.heat * 100)}%</Text>
                         <ProgressBar progress={item.heat} color={item.heat > 0.7 ? 'red' : 'green'} style={styles.progressBar} />
 
-                        <Text style={[styles.blockDetail, { color: theme.text }]}>Ammonia Level: {Math.round(item.ammonia * 100)}%</Text>
+                        <Text style={[styles.blockDetail, { color: theme.text }]}>{t('ammonia_level')}: {Math.round(item.ammonia * 100)}%</Text>
                         <ProgressBar progress={item.ammonia} color={item.ammonia > 0.7 ? 'red' : 'green'} style={styles.progressBar} />
 
                         <View style={styles.medicineRecommendation}>
                             <TextInput
                                 style={[styles.noteInput, { borderColor: theme.primary, color: theme.text }]}
-                                placeholder="Add a note"
+                                placeholder={t('add_note')} // Translation for placeholder
                                 placeholderTextColor={theme.text}
                                 value={note}
                                 onChangeText={setNote}
@@ -98,7 +98,7 @@ const Vet_RecommendMedicineScreen = () => {
                                 style={[styles.recommendButton, { backgroundColor: theme.primary }]}
                                 onPress={() => handleAddNote(item.id)}
                             >
-                                <Text style={[styles.recommendButtonText, { color: theme.text }]}>Add Note</Text>
+                                <Text style={[styles.recommendButtonText, { color: theme.text }]}>{t('add_note_button')}</Text>
                             </TouchableOpacity>
                         </View>
 

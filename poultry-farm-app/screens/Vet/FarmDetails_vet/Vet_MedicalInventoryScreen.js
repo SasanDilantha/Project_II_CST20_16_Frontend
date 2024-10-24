@@ -1,9 +1,8 @@
-// screens/Vet/FarmDetails_vet/Vet_MedicalInventoryScreen.js
-
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next'; // Import the translation hook
 
 // Example data grouped by blocks
 const blocks = [
@@ -32,6 +31,7 @@ const blocks = [
 
 const Vet_MedicalInventoryScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation(); // Initialize translation hook
 
     return (
         <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -42,27 +42,27 @@ const Vet_MedicalInventoryScreen = () => {
                         <View key={medical.id} style={styles.medicalDetails}>
                             <View style={styles.detailRow}>
                                 <Icon name="pill" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Drug: {medical.drug}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('drug')}: {medical.drug}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="account" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Supplier: {medical.supplier}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('supplier')}: {medical.supplier}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="cube-outline" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Quantity: {medical.quantity}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('quantity')}: {medical.quantity}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="currency-usd" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Cost: {medical.cost}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('cost')}: {medical.cost}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Purchase Date: {medical.date}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('purchase_date')}: {medical.date}</Text>
                             </View>
                             <View style={styles.detailRow}>
                                 <Icon name="calendar-clock" size={20} color={theme.iconColor} style={styles.icon} />
-                                <Text style={[styles.detailText, { color: theme.text }]}>Expire Date: {medical.expireDate}</Text>
+                                <Text style={[styles.detailText, { color: theme.text }]}>{t('expire_date')}: {medical.expireDate}</Text>
                             </View>
                         </View>
                     ))}

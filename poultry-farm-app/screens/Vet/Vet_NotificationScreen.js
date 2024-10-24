@@ -1,16 +1,16 @@
-// screens/Vet/Vet_NotificationScreen.js
-
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useTheme } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const Vet_NotificationScreen = () => {
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     const notifications = [
-        { id: '1', message: 'Vaccination due for chickens.' },
-        { id: '2', message: 'Medical supplies delivered.' },
-        { id: '3', message: 'Health inspection scheduled.' },
+        { id: '1', message: t('vaccination_due') },
+        { id: '2', message: t('medical_supplies_delivered') },
+        { id: '3', message: t('health_inspection_scheduled') },
     ];
 
     return (
