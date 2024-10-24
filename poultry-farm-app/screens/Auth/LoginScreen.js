@@ -7,6 +7,7 @@ import i18n from '../../i18n';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
+import { BASE_URL } from '../../services/bas_url';
 
 const LoginScreen = ({ navigation }) => {
   const { theme, toggleTheme } = useTheme();
@@ -18,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.64.15:7070/realms/PoultryFarmSystem/protocol/openid-connect/token",
+        BASE_URL + ":7070/realms/PoultryFarmSystem/protocol/openid-connect/token",
         new URLSearchParams({
           grant_type: "password",
           client_id: "poulty-farm-client",

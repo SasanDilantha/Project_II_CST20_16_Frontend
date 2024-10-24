@@ -1,23 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../theme/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import { BASE_URL } from '../../../services/bas_url';
+
+
+const uri = BASE_URL;
 
 const FarmDetailScreen = ({ route, navigation }) => {
   const { theme } = useTheme();
   const { t } = useTranslation();
+  const [mgr, setMgr] = useState([]);
+  const [empCount, setEmpCount] = useState(0);
   const { farm } = route.params;
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  // get manager details
+  useEffect(() => {
+    const fetchMgr = async () => {
+      try {
+        const response = await axios.get(
+          uri + ":8222/api/user/managers/" + farm.farm_id
+        );
+        setMgr(response.data);
+        console.log("fetch mgr details:", response.data);
+      } catch (error) {
+        console.error("Error fetching farms:", error);
+      }
+    };
+
+    fetchMgr();
+  }, []);
+
+  // get employee count
+  useEffect(() => {
+    const fetchECount = async () => {
+      try {
+        const response = await axios.get(
+          uri + ":8222/api/user/count/" + farm.farm_id
+        );
+        setEmpCount(response.data);
+        console.log("employee count:", response.data);
+      } catch (error) {
+        console.error("Error fetching farms:", error);
+      }
+    };
+
+    fetchECount();
+  }, []);
+
+
+
   const sampleData = {
     farmManager: {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      contactNumber: '123-456-7890',
+      name: mgr.name,
+      email: mgr.email,
+      contactNumber: mgr.phone,
     },
-    totalEmployees: 15,
+    totalEmployees: empCount,
   };
 
   return (
@@ -33,7 +75,7 @@ const FarmDetailScreen = ({ route, navigation }) => {
           {t("remaining_chick_count")}: {farm.available_inventory_count}
         </Text>
         <Text style={[styles.detailText, { color: theme.text }]}>
-          {t("total_employees")}: {sampleData.chick_age}
+          {t("total_employees")}: {sampleData.totalEmployees}
         </Text>
         <TouchableOpacity
           onPress={() => setModalVisible(true)}

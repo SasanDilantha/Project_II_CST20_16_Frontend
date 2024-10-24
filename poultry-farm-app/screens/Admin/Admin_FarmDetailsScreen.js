@@ -11,21 +11,13 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../theme/ThemeContext";
-import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { BASE_URL } from "../../services/bas_url";
 
-// const initialFarms = [
-//   { id: 1, name: 'Farm 1', startedChickCount: 200, currentChickCount: 150, location: 'Location 1', blockCount: 5 },
-//   { id: 2, name: 'Farm 2', startedChickCount: 250, currentChickCount: 200, location: 'Location 2', blockCount: 7 },
-//   { id: 3, name: 'Farm 3', startedChickCount: 300, currentChickCount: 250, location: 'Location 3', blockCount: 6 },
-// ];
-
-
-
-const FarmDetailsScreen = async ({ navigation }) => {
+const FarmDetailsScreen = ({ navigation }) => {
   const { theme } = useTheme();
-  const { t } = useTranslation(); // Initialize the translation hook
-  //const [farms, setFarms] = useState(initialFarms);
+  const { t } = useTranslation();
   const [farms, setFarms] = useState([]);
   const [isAddModalVisible, setAddModalVisible] = useState(false);
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -39,26 +31,40 @@ const FarmDetailsScreen = async ({ navigation }) => {
     managerDetails: "",
   });
 
-
-  console.log("Fetching farms...");
   useEffect(() => {
-    const getAllFarms = async () => {
+    const fetchFarms = async () => {
       try {
+        console.log("Fetching farms...");
         const response = await axios.get(
-          "http://192.168.64.15:8222/api/farm/get/all/details"
+          BASE_URL + ":8222/api/farm/get/all/details"
         );
         setFarms(response.data);
         console.log("Farms fetched successfully:", response.data);
       } catch (error) {
-        console.error(
-          "Failed to fetch farms:",
-          error.response?.data || error.message
-        );
+        console.error("Error fetching farms:", error);
       }
     };
-    getAllFarms();
-  }, []);
 
+    fetchFarms(); // Call the fetch function
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
+  // useEffect(() => {
+  //   const getAllFarms = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         "http://172.17.74.147:8222/api/farm/get/all/details"
+  //       );
+  //       setFarms(response.data);
+  //       console.log("Farms fetched successfully:", response.data);
+  //     } catch (error) {
+  //       console.error(
+  //         "Failed to fetch farms:",
+  //         error.response?.data || error.message
+  //       );
+  //     }
+  //   };
+  //   getAllFarms();
+  // }, []);
 
   //const token = await checkAndRefreshToken(); // Call the function to refresh the token
   // const token = await AsyncStorage.getItem("access_token");
